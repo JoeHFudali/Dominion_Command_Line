@@ -21,8 +21,9 @@ Card::Card(string nm, int cst, vector<string> tps, vector<string> desc) {
 void Card::printCardInfo() {
 
 	int cardWidth = 16;
-	int cardHeight = 9;
+	int cardHeight = 8;
 	int nameSetWidth = (cardWidth - 2 - name.length()) / 2;
+	int descriptionSetWidth;
 
 	cout << "+" << setfill('-') << setw(cardWidth - 2) << "" << "+" << endl;
 
@@ -34,15 +35,52 @@ void Card::printCardInfo() {
 	}
 	
 
-	for (int i = 0; i < cardHeight / 2; i++) {
-		cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
+	if (description.size() == 1 && description[0] == " ") {
+		for (int i = 0; i < cardHeight; i++) {
+			cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
+		}
+	}
+	else {
+		for (int i = 0; i < cardHeight / 2; i++) {
+			cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
+		}
+
+		for (int i = 0; i < description.size(); i++) {
+			descriptionSetWidth = (cardWidth - 2 - description[i].size()) / 2;
+
+
+			if (description[i].size() % 2 == 0) {
+				cout << "|" << setw(descriptionSetWidth) << "" << description[i] << setw(descriptionSetWidth) << "" << "|" << endl;
+			}
+			else {
+				cout << "|" << setw(descriptionSetWidth) << "" << description[i] << setw(descriptionSetWidth + 1) << "" << "|" << endl;
+			}
+
+
+		}
+
+		for (int i = 0; i < cardHeight / 2; i++) {
+			cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
+		}
+
 	}
 
+	int typeLength = 0;
 
-	for(int )
-	cout << "|" << setw(nameSetWidth)
+	for (int i = 0; i < types.size(); i++) {
+		typeLength += types[i].size();
+	}
+	typeLength = (cardWidth - 2 - typeLength) / 2;
+	cout << "|" << cost << setw(typeLength - to_string(cost).length()) << "";
+	for (int i = 0; i < types.size(); i++) {
+		cout << types[i];
+		if (i < types.size() - 1) {
+			cout << " - ";
+		}
+	}
 
-	
+	cout << setw(typeLength) << "" << "|" << endl;
+	cout << "+" << setfill('-') << setw(cardWidth - 2) << "" << "+" << endl << endl;
 
 	
 }
