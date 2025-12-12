@@ -7,7 +7,7 @@ Card::Card() {
 	cost = 0;
 
 	types.push_back("Treasure");
-	description = {" "};
+	description = {"1 o"};
 }
 
 Card::Card(string nm, int cst, vector<string> tps, vector<string> desc) {
@@ -18,10 +18,22 @@ Card::Card(string nm, int cst, vector<string> tps, vector<string> desc) {
 	description = desc;
 }
 
+string Card::getName() {
+	return name;
+}
+
+vector<string> Card::getTypes() {
+	return types;
+}
+
+vector<string> Card::getDesc() {
+	return description;
+}
+
 void Card::printCardInfo() {
 
-	int cardWidth = 16;
-	int cardHeight = 8;
+	int cardWidth = 18;
+	int cardHeight = 9;
 	int nameSetWidth = (cardWidth - 2 - name.length()) / 2;
 	int descriptionSetWidth;
 
@@ -70,8 +82,17 @@ void Card::printCardInfo() {
 	for (int i = 0; i < types.size(); i++) {
 		typeLength += types[i].size();
 	}
-	typeLength = (cardWidth - 2 - typeLength) / 2;
-	cout << "|" << cost << setw(typeLength - to_string(cost).length()) << "";
+
+	if (typeLength % 2 == 0) {
+		typeLength = (cardWidth - 2 - typeLength) / 2;
+		cout << "|" << cost << setw(typeLength - to_string(cost).length()) << "";
+	}
+	else {
+		typeLength = ((cardWidth - 2 - typeLength) / 2);
+		cout << "|" << cost << setw(typeLength - to_string(cost).length() + 1) << "";
+	}
+	
+	
 	for (int i = 0; i < types.size(); i++) {
 		cout << types[i];
 		if (i < types.size() - 1) {

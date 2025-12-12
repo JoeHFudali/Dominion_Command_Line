@@ -15,6 +15,10 @@ public:
 
 	void printCardInfo();
 
+	string getName();
+	vector<string> getTypes();
+	vector<string> getDesc();
+
 private:
 
 	string name;
