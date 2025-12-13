@@ -18,9 +18,11 @@ public:
 	bool takeCard(string name, Card& retCard);
 
 	int totalCards();
+	bool isEmptyDeck();
 	int sumVP();
 
 	void printDeck();
+	Card getSingleCard(int index);
 
 
 private:

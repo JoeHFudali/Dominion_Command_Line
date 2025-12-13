@@ -53,6 +53,11 @@ int Deck::totalCards() {
 	return cards.size();
 }
 
+bool Deck::isEmptyDeck() {
+	bool retVal = cards.empty() ? true : false;
+	return retVal;
+}
+
 int Deck::sumVP() {
 	int sum = 0;
 
@@ -62,8 +67,23 @@ int Deck::sumVP() {
 				sum += cards[i].getDesc()[j][0] - '0';
 				break;
 			}
+			else if (cards[i].getTypes()[j].find("Curse") != string::npos) {
+				sum -= cards[i].getDesc()[j][1] - '0';
+				break;
+			}
 		}
 	}
 
 	return sum;
+}
+
+void Deck::printDeck() {
+	for (int i = 0; i < cards.size(); i++) {
+		cards[i].printCardInfo();
+		cout << "\n\n\n";
+	}
+}
+
+Card Deck::getSingleCard(int index) {
+	return cards[index];
 }

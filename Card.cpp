@@ -32,8 +32,8 @@ vector<string> Card::getDesc() {
 
 void Card::printCardInfo() {
 
-	int cardWidth = 18;
-	int cardHeight = 9;
+	int cardWidth = 26;
+	int cardHeight = 12;
 	int nameSetWidth = (cardWidth - 2 - name.length()) / 2;
 	int descriptionSetWidth;
 
@@ -53,25 +53,45 @@ void Card::printCardInfo() {
 		}
 	}
 	else {
-		for (int i = 0; i < cardHeight / 2; i++) {
+		for (int i = 0; i < (cardHeight / 2) - description.size() / 2; i++) {
 			cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
 		}
 
 		for (int i = 0; i < description.size(); i++) {
 			descriptionSetWidth = (cardWidth - 2 - description[i].size()) / 2;
 
+			if (description[i].size() > 12) {
+				int longDescLength = (cardWidth - 14) / 2;
+				cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
 
-			if (description[i].size() % 2 == 0) {
-				cout << "|" << setw(descriptionSetWidth) << "" << description[i] << setw(descriptionSetWidth) << "" << "|" << endl;
+				cout << "|" << setw(longDescLength) << "";
+
+				for (int j = 0; j < description[i].size(); j++) {
+					if ((j % 12 == 0 && j != 0)) {
+						cout << setw(longDescLength) << "" << "|" << endl;
+						cout << "|" << setw(longDescLength) << "";
+					}
+					cout << description[i][j];
+				}
+				
+				cout << setw(longDescLength + (12 -  ((description[i].size() % 12 != 0) ? description[i].length() % 12 : 12))) << "" << "|" << endl;
 			}
 			else {
-				cout << "|" << setw(descriptionSetWidth) << "" << description[i] << setw(descriptionSetWidth + 1) << "" << "|" << endl;
+				if (description[i].size() % 2 == 0) {
+					cout << "|" << setw(descriptionSetWidth) << "" << description[i] << setw(descriptionSetWidth) << "" << "|" << endl;
+				}
+				else {
+					cout << "|" << setw(descriptionSetWidth) << "" << description[i] << setw(descriptionSetWidth + 1) << "" << "|" << endl;
+				}
 			}
+
+
+			
 
 
 		}
 
-		for (int i = 0; i < cardHeight / 2; i++) {
+		for (int i = 0; i < (cardHeight / 2) - description.size() / 2; i++) {
 			cout << "|" << setw(cardWidth - 2) << "" << "|" << endl;
 		}
 
@@ -81,6 +101,9 @@ void Card::printCardInfo() {
 
 	for (int i = 0; i < types.size(); i++) {
 		typeLength += types[i].size();
+		if (i > 0) {
+			typeLength += 3;
+		}
 	}
 
 	if (typeLength % 2 == 0) {
