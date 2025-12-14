@@ -40,7 +40,7 @@ int main() {
 
 	
 	Board b;
-	b.printKingdomInfo();
+	b.printCardInfo("Witch");
 
 	
 

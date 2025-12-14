@@ -49,6 +49,10 @@ bool Deck::takeCard(string name, Card& retCard) {
 	return retVal;
 }
 
+void Deck::deleteDeck() {
+	cards.clear();
+}
+
 int Deck::totalCards() {
 	return cards.size();
 }

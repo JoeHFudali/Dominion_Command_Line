@@ -16,6 +16,7 @@ public:
 	void addCard(Card c);
 	Card takeCard();
 	bool takeCard(string name, Card& retCard);
+	void deleteDeck();
 
 	int totalCards();
 	bool isEmptyDeck();
