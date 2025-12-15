@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Board.h"
+#include "Turn.h"
 
 using namespace std;
 
@@ -14,14 +15,15 @@ public:
 	
 	void takeTurn();
 
+	Deck* getDraw();
+	Deck* getDiscard();
+	vector<Card>* getHand();
 
 
 private:
-	Deck drawPile;
-	Deck discardPile;
+	Deck* drawPile;
+	Deck* discardPile;
 
-	vector<Card> hand;
-
-	int coins;
+	vector<Card>* hand;
 
 };

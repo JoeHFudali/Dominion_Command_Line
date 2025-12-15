@@ -11,16 +11,17 @@ class Turn
 public:
 
 	Turn();
-	Turn(vector<Card>& hand, Deck& draw, Deck& discard);
+	Turn(vector<Card>* hand, Deck* draw, Deck* discard);
 
 private:
 
-	void takeActions(vector<Card>& hand, Deck& draw, Deck& discard);
-	//void takeBuys(vector<Card>& hand, Deck& draw, Deck& discard);
-	//void cleanUp(vector<Card>& hand, Deck& draw, Deck& discard);
+	void takeActions(vector<Card>* hand, Deck* draw, Deck* discard);
+	void takeBuys(vector<Card>* hand, Deck* draw, Deck* discard);
+	void cleanUp(vector<Card>* hand, Deck* draw, Deck* discard);
 
 	int actions;
 	int buys;
+	int coins;
 
 
 };
