@@ -15,7 +15,9 @@ public:
 
 	void printCardInfo();
 
+
 	string getName();
+	int getCost();
 	vector<string> getTypes();
 	vector<string> getDesc();
 

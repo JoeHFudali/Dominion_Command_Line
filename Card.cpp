@@ -7,7 +7,7 @@ Card::Card() {
 	cost = 0;
 
 	types.push_back("Treasure");
-	description = {"1 o"};
+	description = {"1 $"};
 }
 
 Card::Card(string nm, int cst, vector<string> tps, vector<string> desc) {
@@ -20,6 +20,10 @@ Card::Card(string nm, int cst, vector<string> tps, vector<string> desc) {
 
 string Card::getName() {
 	return name;
+}
+
+int Card::getCost() {
+	return cost;
 }
 
 vector<string> Card::getTypes() {

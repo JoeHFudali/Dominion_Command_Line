@@ -9,6 +9,10 @@ public:
 	Board();
 	Board(vector<Deck> baseCards, vector<Deck> kingdomCards, int players);
 
+	Card findCardOnBoard(string name);
+
+	Card takeCard(string name);
+
 	bool checkForGameEnd();
 
 	void printBaseInfo();

@@ -8,8 +8,8 @@ Board::Board() {
 	numPlayers = 2;
 
 	Card copper;
-	Card silver("Silver", 3, { "Treasure" }, { "2 o" });
-	Card gold("Gold", 6, { "Treasure" }, { "3 o" });
+	Card silver("Silver", 3, { "Treasure" }, { "2 $" });
+	Card gold("Gold", 6, { "Treasure" }, { "3 $" });
 	Card estate("Estate", 2, { "Victory" }, { "1 VP" });
 	Card duchy("Duchy", 5, { "Victory" }, { "3 VP" });
 	Card province("Province", 8, { "Victory" }, { "6 VP" });
@@ -31,12 +31,12 @@ Board::Board() {
 	Card cellar("Cellar", 2, { "Action" }, { "+1 Action", "Discard any number of cards, then draw that many." });
 	Card moat("Moat", 2, { "Action", "Reaction" }, { "+2 Cards", "When another player plays an Attack card, you may first reveal this from your hand, to be unnaffected by it." });
 	Card village("Village", 3, { "Action" }, { "+1 Card", "+2 Actions" });
-	Card merchant("Merchant", 3, { "Action" }, { "+1 Card", "+1 Action", "The first time you play a Silver this turn, +1 o." });
-	Card workshop("Workshop", 4, { "Action" }, { "Gain a card costing up to 4 o." });
+	Card merchant("Merchant", 3, { "Action" }, { "+1 Card", "+1 Action", "The first time you play a Silver this turn, +1 $." });
+	Card workshop("Workshop", 4, { "Action" }, { "Gain a card costing up to 4 $." });
 	Card smithy("Smithy", 4, { "Action" }, { "+3 Cards" });
-	Card remodel("Remodel", 4, { "Action" }, { "Trash a card from your hand. Gain a card costing up to 2 o more than it." });
-	Card militia("Militia", 4, { "Action", "Attack" }, { "+2 o", "Each other player discards down to 3 cards in hand." });
-	Card market("Market", 5, { "Action" }, { "+1 Card", "+1 Action", "+1 Buy", "+1 o" });
+	Card remodel("Remodel", 4, { "Action" }, { "Trash a card from your hand. Gain a card costing up to 2 $ more than it." });
+	Card militia("Militia", 4, { "Action", "Attack" }, { "+2 $", "Each other player discards down to 3 cards in hand." });
+	Card market("Market", 5, { "Action" }, { "+1 Card", "+1 Action", "+1 Buy", "+1 $" });
 	Card mine("Mine", 5, { "Action" }, { "You may trash a Treasure from your hand. Gain a Treasure to your hand costing up to 3 o more than it." });
 
 	vector<Card> kingdom = { cellar, moat, village, merchant, workshop, smithy, remodel, militia, market, mine };
@@ -61,6 +61,54 @@ Board::Board(vector<Deck> baseCards, vector<Deck> kingdomCards, int players) {
 	numPlayers = players;
 
 	//Trash pile also remains unaffected here
+}
+
+Card Board::findCardOnBoard(string name) {
+	Card retVal;
+	bool found = false;
+	for (int i = 0; i < baseDecks.size(); i++) {
+		if (!baseDecks[i].isEmptyDeck() && baseDecks[i].getSingleCard(0).getName() == name) {
+			retVal = baseDecks[i].getSingleCard(0);
+			found = true;
+			break;
+		}
+	}
+
+	if (!found) {
+		for (int i = 0; i < kingdomDecks.size(); i++) {
+			if (!kingdomDecks[i].isEmptyDeck() && kingdomDecks[i].getSingleCard(0).getName() == name) {
+				retVal = kingdomDecks[i].getSingleCard(0);
+				found = true;
+				break;
+			}
+		}
+	}
+
+	return retVal;
+}
+
+Card Board::takeCard(string name) {
+	Card retVal;
+	bool found = false;
+	for (int i = 0; i < baseDecks.size(); i++) {
+		if (!baseDecks[i].isEmptyDeck() && baseDecks[i].getSingleCard(0).getName() == name) {
+			retVal = baseDecks[i].takeCard();
+			found = !found;
+			break;
+		}
+	}
+
+	if (!found) {
+		for (int i = 0; i < kingdomDecks.size(); i++) {
+			if (!kingdomDecks[i].isEmptyDeck() && kingdomDecks[i].getSingleCard(0).getName() == name) {
+				retVal = kingdomDecks[i].takeCard();
+				found = !found;
+				break;
+			}
+		}
+	}
+
+	return retVal;
 }
 
 bool Board::checkForGameEnd() {

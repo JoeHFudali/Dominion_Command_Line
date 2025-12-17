@@ -11,12 +11,15 @@ public:
 
 	Functionality();
 
-	void PlayCard(Card c, Player& player, Board& board);
+	void PlayCard(Card c, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount);
 
 private:
 	
 	void addActions(int& actionCount, int amount);
 	void addBuys(int& buyCount, int amount);
-	void addCards(Player& player, int amount);
+	void addCoins(int& coinCount, int amount);
+	void addCards(vector<Card>* hand, Deck* draw, int amount);
+
+	void decideAction(string cardName);
 
 };
