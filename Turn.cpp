@@ -3,10 +3,17 @@
 
 
 Turn::Turn() {
+	actions = 1;
+	buys = 1;
+	coins = 0;
+
+	board = new Board();
+
+	
 	//Do nothing for now
 }
 
-Turn::Turn(Player& player, Board* b) {
+Turn::Turn(vector<Card>* hand, Deck* draw, Deck* discard, Board* b) {
 
 	actions = 1;
 	buys = 1;
@@ -14,11 +21,11 @@ Turn::Turn(Player& player, Board* b) {
 
 	board = b;
 
-	takeActions(player.getHand(), player.getDraw(), player.getDiscard());
+	takeActions(hand, draw, discard);
 
-	takeBuys(player.getHand(), player.getDraw(), player.getDiscard());
+	takeBuys(hand, draw, discard);
 
-	cleanUp(player.getHand(), player.getDraw(), player.getDiscard());
+	cleanUp(hand, draw, discard);
 
 }
 
@@ -83,6 +90,7 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 				}
 				else {
 					cout << "Oops, looks like you do not have enough money to buy this card." << endl << endl;
+					choice = "";
 				}
 			}
 			if (choice == "pass") {

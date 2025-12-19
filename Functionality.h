@@ -20,6 +20,6 @@ private:
 	void addCoins(int& coinCount, int amount);
 	void addCards(vector<Card>* hand, Deck* draw, int amount);
 
-	void decideAction(string cardName);
+	void decideAction(string cardName, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount);
 
 };

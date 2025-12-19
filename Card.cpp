@@ -132,3 +132,15 @@ void Card::printCardInfo() {
 
 	
 }
+
+bool Card::isOfType(string type) {
+	bool retVal = false;
+	for (int i = 0; i < description.size(); i++) {
+		if (description[i] == type) {
+			retVal = !retVal;
+			break;
+		}
+	}
+
+	return retVal;
+}

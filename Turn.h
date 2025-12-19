@@ -11,7 +11,7 @@ class Turn
 public:
 
 	Turn();
-	Turn(Player& player, Board* b);
+	Turn(vector<Card>* hand, Deck* draw, Deck* discard, Board* b);
 
 private:
 

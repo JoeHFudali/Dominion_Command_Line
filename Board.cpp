@@ -63,6 +63,10 @@ Board::Board(vector<Deck> baseCards, vector<Deck> kingdomCards, int players) {
 	//Trash pile also remains unaffected here
 }
 
+void Board::addToTrash(Card c) {
+	trashDeck.addCard(c);
+}
+
 Card Board::findCardOnBoard(string name) {
 	Card retVal;
 	bool found = false;

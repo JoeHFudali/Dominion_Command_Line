@@ -9,6 +9,8 @@ public:
 	Board();
 	Board(vector<Deck> baseCards, vector<Deck> kingdomCards, int players);
 
+	void addToTrash(Card c);
+
 	Card findCardOnBoard(string name);
 
 	Card takeCard(string name);

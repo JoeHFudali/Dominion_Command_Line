@@ -15,6 +15,8 @@ public:
 
 	void printCardInfo();
 
+	bool isOfType(string type);
+
 
 	string getName();
 	int getCost();
