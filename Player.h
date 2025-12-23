@@ -13,7 +13,7 @@ public:
 	void resetHand();
 	void discardToDraw();
 	
-	void takeTurn(Board* b);
+	void takeTurn(Board* b, vector<Player>& players);
 
 	Deck* getDraw();
 	Deck* getDiscard();

@@ -11,11 +11,11 @@ class Turn
 public:
 
 	Turn();
-	Turn(vector<Card>* hand, Deck* draw, Deck* discard, Board* b);
+	Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b);
 
 private:
 
-	void takeActions(vector<Card>* hand, Deck* draw, Deck* discard);
+	void takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
 	void takeBuys(vector<Card>* hand, Deck* draw, Deck* discard);
 	void cleanUp(vector<Card>* hand, Deck* draw, Deck* discard);
 

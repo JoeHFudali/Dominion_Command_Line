@@ -142,6 +142,23 @@ bool Board::checkForGameEnd() {
 	return false;
 }
 
+int Board::numEmptyDecks() {
+	int retVal = 0;
+	for (int i = 0; i < baseDecks.size(); i++) {
+		if (baseDecks[i].totalCards() == 0) {
+			retVal++;
+		}
+	}
+
+	for (int i = 0; i < kingdomDecks.size(); i++) {
+		if (kingdomDecks[i].totalCards() == 0) {
+			retVal++;
+		}
+	}
+
+	return retVal;
+}
+
 void Board::printBaseInfo() {
 	cout << "Cards in the Base decks and their remaining amounts..." << endl;
 
@@ -198,4 +215,8 @@ void Board::printCardInfo(string name) {
 	}
 
 
+}
+
+Deck Board::getBase(int index) {
+	return baseDecks[index];
 }

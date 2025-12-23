@@ -19,8 +19,8 @@ Player::Player() {
 
 }
 
-void Player::takeTurn(Board* b) {
-	Turn t(hand, drawPile, discardPile, b);
+void Player::takeTurn(Board* b, vector<Player>& players) {
+	Turn t(players, hand, drawPile, discardPile, b);
 	//Turn class will reset the cards in play on it's own, this class will reset the hand and draw new cards (50/50 clean up between these two classes)
 	resetHand();
 

@@ -16,11 +16,14 @@ public:
 	Card takeCard(string name);
 
 	bool checkForGameEnd();
+	int numEmptyDecks();
 
 	void printBaseInfo();
 	void printKingdomInfo();
 	void printTrashInfo();
 	void printCardInfo(string name);
+
+	Deck getBase(int index);
 
 
 private:

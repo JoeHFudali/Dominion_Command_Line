@@ -11,7 +11,7 @@ public:
 
 	Functionality();
 
-	void PlayCard(Card c, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount);
+	void PlayCard(Card c, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount);
 
 private:
 	
@@ -20,6 +20,8 @@ private:
 	void addCoins(int& coinCount, int amount);
 	void addCards(vector<Card>* hand, Deck* draw, int amount);
 
-	void decideAction(string cardName, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount);
+	//Add a function here later to check if player has a moat in their hand to block an attack card
+
+	void decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount);
 
 };

@@ -7,7 +7,7 @@ Functionality::Functionality() {
 	//Do nothing for now
 }
 
-void Functionality::PlayCard(Card c, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount) {
+void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount) {
 	for (int i = 0; i < c.getDesc().size(); i++) {
 
 		if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" Card") != string::npos) {
@@ -32,7 +32,7 @@ void Functionality::PlayCard(Card c, vector<Card>* hand, Deck* draw, Deck* disca
 
 		else if (c.getDesc()[i].length() > 12) {
 			//Do our specialty action here
-			decideAction(c.getName(), hand, draw, discard, b, actionCount, buyCount, coinCount);
+			decideAction(c.getName(), players, hand, draw, discard, b, actionCount, buyCount, coinCount);
 		}
 	}
 }
@@ -58,7 +58,7 @@ void Functionality::addCards(vector<Card>* hand, Deck* draw, int amount) {
 }
 
 //Need to come back to this function later, many of the cases are inefficient, and can be reorganized more efficiently
-void Functionality::decideAction(string cardName, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount) {
+void Functionality::decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount) {
 	 
 	if (cardName == "Moneylender") {
 		cout << "Trash a card? ('trash' to trash a copper for +3 $, and 'no' to not do so)" << endl;
@@ -102,7 +102,7 @@ void Functionality::decideAction(string cardName, vector<Card>* hand, Deck* draw
 					getline(cin, yOrN);
 
 					if (yOrN == "yes") {
-						PlayCard(c, hand, draw, discard, b, actionCount, buyCount, coinCount);
+						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount);
 						break;
 					}
 					else if (yOrN != "no") {
@@ -448,5 +448,215 @@ void Functionality::decideAction(string cardName, vector<Card>* hand, Deck* draw
 			}
 
 		} while (!cardBought);
+	}
+
+	else if (cardName == "Poacher") {
+
+		int numToDiscard = b.numEmptyDecks();
+		bool trashed = false;
+
+		for (int i = 0; i < numToDiscard; i++) {
+			if (hand->empty()) {
+				break;
+			}
+
+			do {
+				cout << "1. Discard a card in your hand - discard [card name]" << endl;
+
+				string choice;
+
+				getline(cin, choice);
+
+				if (choice.substr(0, 7) == "discard") {
+					for (int j = 0; j < hand->size(); j++) {
+						if (hand->at(j).getName() == choice.substr(6)) {
+							Card c = hand->at(i);
+							hand->erase(hand->begin() + j);
+							discard->addCard(c);
+							trashed = !trashed;
+							break;
+						}
+					}
+					if (!trashed) {
+						cout << "The card you want to discard is not in your hand. Discard a card that is in your hand please!" << endl << endl;
+					}
+
+				}
+				else {
+					cout << "Oops, looks like you enetered something that wasn't discard. Enter 'discard [card name]' " << endl << endl;
+				}
+
+			} while (!trashed);
+			trashed = !trashed;
+
+		}
+	}
+
+	else if (cardName == "Sentry") {
+
+		vector<Card> topTwoCards;
+
+		topTwoCards.push_back(draw->takeCard());
+		topTwoCards.push_back(draw->takeCard());
+
+		cout << "Looks at the top two cards of your deck, and either trash, discard, or put them back on top. You can do this to one or both of the cards, and you don't have to do the same action for both" << endl << endl;
+
+		topTwoCards[0].printCardInfo();
+		topTwoCards[1].printCardInfo();
+
+		string choice;
+
+		cout << "NOTE: current is the first care taken" << endl << endl;
+
+		do {
+			cout << "1. Look at the current card - look" << endl;
+			cout << "2. Discard the current card - discard" << endl;
+			cout << "3. Trash the current card - trash" << endl;
+			cout << "4. Rearrange card order/switch to other card - switch" << endl;
+			cout << "5. Put card back on deck - deck" << endl;
+
+			getline(cin, choice);
+
+			if (choice == "look") {
+				topTwoCards[0].printCardInfo();
+			}
+			else if (choice == "discard") {
+				discard->addCard(topTwoCards[0]);
+				topTwoCards.erase(topTwoCards.begin());
+			}
+			else if (choice == "trash") {
+				b.addToTrash(topTwoCards[0]);
+				topTwoCards.erase(topTwoCards.begin());
+			}
+			else if (choice == "switch") {
+				Card tempC = topTwoCards[0];
+				topTwoCards[0] = topTwoCards[1];
+				topTwoCards[1] = tempC;
+			}
+			else if (choice == "deck") {
+				draw->addCard(topTwoCards[0]);
+				topTwoCards.erase(topTwoCards.begin());
+			}
+
+		} while (!topTwoCards.empty());
+	}
+
+	else if (cardName == "Library") {
+		cout << "Drawing until you have 7 cards..." << endl << endl;
+
+		vector<Card> setAsideActions;
+
+		while (hand->size() < 7) {
+			//Check to see if draw is empty, and then replace it. will do later
+			Card c = draw->takeCard();
+			if (!c.isOfType("Action")) {
+				hand->push_back(c);
+			}
+			else {
+
+				cout << "Keep this action card in your hand? - type 'yes' or 'no' " << endl << endl;
+				
+				string choice;
+				do {
+					getline(cin, choice);
+
+					if (choice == "yes") {
+						hand->push_back(c);
+					}
+
+					else if (choice == "no") {
+						setAsideActions.push_back(c);
+					}
+
+					else {
+						cout << "Oops, looks like you did not enter either 'yes' or 'no'. Please try again" << endl << endl;
+					}
+
+
+				} while (choice != "no" || choice != "yes");
+
+
+			}
+
+		}
+
+		for (int i = 0; i < setAsideActions.size(); i++) {
+			discard->addCard(setAsideActions[i]);
+		}
+		setAsideActions.clear();
+
+
+	}
+
+	else if (cardName == "Witch") {
+
+		if (b.getBase(6).totalCards() > 0) {
+			for (int i = 0; i < players.size(); i++) {
+				//Check for player[i] having a moat to block action
+				Card witch = b.takeCard("Witch");
+
+				players[i].getDiscard()->addCard(witch);
+
+				if (b.getBase(6).totalCards() == 0) {
+					break;
+				}
+			}
+		}
+
+
+		
+	}
+
+	else if (cardName == "Council Room") {
+		for (int i = 0; i < players.size(); i++) {
+			//Need to once again check here to see if draw deck is empty or not
+			Card c = players[i].getDraw()->takeCard();
+
+			players[i].getHand()->push_back(c);
+
+		}
+	}
+
+	else if (cardName == "Militia") {
+
+		for (int i = 0; i < players.size(); i++) {
+			//Need to check if players[i[ has moat or not
+			while (players[i].getHand()->size() > 3) {
+				int randIndex = rand() % players[i].getHand()->size();
+
+				Card c = players[i].getHand()->at(randIndex);
+				players[i].getDiscard()->addCard(c);
+				players[i].getHand()->erase(players[i].getHand()->begin() + randIndex);
+
+			}
+		}
+	}
+
+	else if (cardName == "Bandit") {
+
+		for (int i = 0; i < players.size(); i++) {
+			//Need to check if players[i] has a moat or not
+			vector<Card> topTwoCards;
+
+			//Need to once again check to see if draw is empty or not
+			topTwoCards.push_back(players[i].getDraw()->takeCard());
+			topTwoCards.push_back(players[i].getDraw()->takeCard());
+
+			if (topTwoCards[0].getName() == "Gold" || topTwoCards[0].getName() == "Silver") {
+				b.addToTrash(topTwoCards[0]);
+				topTwoCards.erase(topTwoCards.begin());
+			}
+
+			else if (topTwoCards[1].getName() == "Gold" || topTwoCards[1].getName() == "Silver") {
+				b.addToTrash(topTwoCards[1]);
+				topTwoCards.erase(topTwoCards.begin() + 1);
+			}
+
+			for (int j = 0; j < topTwoCards.size(); j++) {
+				players[i].getDiscard()->addCard(topTwoCards[j]);
+			}
+
+
+		}
 	}
 }

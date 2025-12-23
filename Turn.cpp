@@ -13,7 +13,7 @@ Turn::Turn() {
 	//Do nothing for now
 }
 
-Turn::Turn(vector<Card>* hand, Deck* draw, Deck* discard, Board* b) {
+Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b) {
 
 	actions = 1;
 	buys = 1;
@@ -21,7 +21,7 @@ Turn::Turn(vector<Card>* hand, Deck* draw, Deck* discard, Board* b) {
 
 	board = b;
 
-	takeActions(hand, draw, discard);
+	takeActions(players, hand, draw, discard);
 
 	takeBuys(hand, draw, discard);
 
@@ -29,7 +29,7 @@ Turn::Turn(vector<Card>* hand, Deck* draw, Deck* discard, Board* b) {
 
 }
 
-void Turn::takeActions(vector<Card>* hand, Deck* draw, Deck* discard) {
+void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
 	string cName;
 	vector<int> actionsChoices;
 	cout << "Action turn. Cards available: " << endl;
@@ -56,6 +56,8 @@ void Turn::takeActions(vector<Card>* hand, Deck* draw, Deck* discard) {
 
 		//Do action
 		//Then put the current card "in play," A.K.A. put it in our vector in the turn private data
+
+		actions--;
 	}
 	
 }
