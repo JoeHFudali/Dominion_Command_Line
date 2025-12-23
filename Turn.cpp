@@ -7,6 +7,9 @@ Turn::Turn() {
 	buys = 1;
 	coins = 0;
 
+	merchantBuff = 0;
+	
+
 	board = new Board();
 
 	
@@ -18,6 +21,9 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 	actions = 1;
 	buys = 1;
 	coins = 0;
+
+	merchantBuff = 0;
+	
 
 	board = b;
 
@@ -51,11 +57,17 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 		cout << "Action play: " << endl;
 		getline(cin, cName);
 		int choice = stoi(cName);
+		//Somehow get card based on index here
+		Card c;
 
 		Functionality action;
 
-		//Do action
+		//Do action - board neeeds to be changed here
+		action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
+		//hand->erase(hand->begin + [some index variable]);
+		
 		//Then put the current card "in play," A.K.A. put it in our vector in the turn private data
+		inPlay.push_back(c);
 
 		actions--;
 	}
@@ -64,6 +76,16 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 
 void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 	cout << "Buy Phase" << endl << endl;
+
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).getName() == "Silver") {
+			coins += merchantBuff;
+			break;
+		}
+	}
+
+
+
 	for (int i = 0; i < buys; i++) {
 		cout << "Coins: " << coins << endl;
 		cout << "Num of buys: " << buys - i << endl;

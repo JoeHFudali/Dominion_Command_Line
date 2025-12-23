@@ -7,7 +7,7 @@ Functionality::Functionality() {
 	//Do nothing for now
 }
 
-void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount) {
+void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff) {
 	for (int i = 0; i < c.getDesc().size(); i++) {
 
 		if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" Card") != string::npos) {
@@ -32,7 +32,7 @@ void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand
 
 		else if (c.getDesc()[i].length() > 12) {
 			//Do our specialty action here
-			decideAction(c.getName(), players, hand, draw, discard, b, actionCount, buyCount, coinCount);
+			decideAction(c.getName(), players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 		}
 	}
 }
@@ -57,8 +57,20 @@ void Functionality::addCards(vector<Card>* hand, Deck* draw, int amount) {
 
 }
 
+bool Functionality::hasMoat(vector<Card>* hand) {
+	bool retVal = false;
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).getName() == "Moat") {
+			retVal = !retVal;
+			break;
+		}
+	}
+
+	return retVal;
+}
+
 //Need to come back to this function later, many of the cases are inefficient, and can be reorganized more efficiently
-void Functionality::decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount) {
+void Functionality::decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff) {
 	 
 	if (cardName == "Moneylender") {
 		cout << "Trash a card? ('trash' to trash a copper for +3 $, and 'no' to not do so)" << endl;
@@ -102,7 +114,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					getline(cin, yOrN);
 
 					if (yOrN == "yes") {
-						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount);
+						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 						break;
 					}
 					else if (yOrN != "no") {
@@ -592,13 +604,17 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		if (b.getBase(6).totalCards() > 0) {
 			for (int i = 0; i < players.size(); i++) {
-				//Check for player[i] having a moat to block action
-				Card witch = b.takeCard("Witch");
+				if (!hasMoat(players[i].getHand())) {
+					Card witch = b.takeCard("Witch");
 
-				players[i].getDiscard()->addCard(witch);
+					players[i].getDiscard()->addCard(witch);
 
-				if (b.getBase(6).totalCards() == 0) {
-					break;
+					if (b.getBase(6).totalCards() == 0) {
+						break;
+					}
+				}
+				else {
+					cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
 				}
 			}
 		}
@@ -621,14 +637,21 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		for (int i = 0; i < players.size(); i++) {
 			//Need to check if players[i[ has moat or not
-			while (players[i].getHand()->size() > 3) {
-				int randIndex = rand() % players[i].getHand()->size();
 
-				Card c = players[i].getHand()->at(randIndex);
-				players[i].getDiscard()->addCard(c);
-				players[i].getHand()->erase(players[i].getHand()->begin() + randIndex);
+			if (!hasMoat(players[i].getHand())) {
+				while (players[i].getHand()->size() > 3) {
+					int randIndex = rand() % players[i].getHand()->size();
 
+					Card c = players[i].getHand()->at(randIndex);
+					players[i].getDiscard()->addCard(c);
+					players[i].getHand()->erase(players[i].getHand()->begin() + randIndex);
+
+				}
 			}
+			else {
+				cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+			}
+			
 		}
 	}
 
@@ -636,27 +659,129 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		for (int i = 0; i < players.size(); i++) {
 			//Need to check if players[i] has a moat or not
-			vector<Card> topTwoCards;
 
-			//Need to once again check to see if draw is empty or not
-			topTwoCards.push_back(players[i].getDraw()->takeCard());
-			topTwoCards.push_back(players[i].getDraw()->takeCard());
+			if (!hasMoat(players[i].getHand())) {
+				vector<Card> topTwoCards;
 
-			if (topTwoCards[0].getName() == "Gold" || topTwoCards[0].getName() == "Silver") {
-				b.addToTrash(topTwoCards[0]);
-				topTwoCards.erase(topTwoCards.begin());
+				//Need to once again check to see if draw is empty or not
+				topTwoCards.push_back(players[i].getDraw()->takeCard());
+				topTwoCards.push_back(players[i].getDraw()->takeCard());
+
+				if (topTwoCards[0].getName() == "Gold" || topTwoCards[0].getName() == "Silver") {
+					b.addToTrash(topTwoCards[0]);
+					topTwoCards.erase(topTwoCards.begin());
+				}
+
+				else if (topTwoCards[1].getName() == "Gold" || topTwoCards[1].getName() == "Silver") {
+					b.addToTrash(topTwoCards[1]);
+					topTwoCards.erase(topTwoCards.begin() + 1);
+				}
+
+				for (int j = 0; j < topTwoCards.size(); j++) {
+					players[i].getDiscard()->addCard(topTwoCards[j]);
+				}
+
 			}
-
-			else if (topTwoCards[1].getName() == "Gold" || topTwoCards[1].getName() == "Silver") {
-				b.addToTrash(topTwoCards[1]);
-				topTwoCards.erase(topTwoCards.begin() + 1);
+			else {
+				cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
 			}
-
-			for (int j = 0; j < topTwoCards.size(); j++) {
-				players[i].getDiscard()->addCard(topTwoCards[j]);
-			}
-
+			
 
 		}
 	}
+
+	else if (cardName == "Bureaucrat") {
+		//This function acts a bit differently than normal game. This goes through the other players hand and will reveal the first victory card, not one of their choosing. 
+		//Have to also edit this function in board to check for empty decks and return nothing
+		Card c = b.takeCard("Silver");
+
+		draw->addCard(c);
+		//Need to see if players[i] has a moat or not in their hand
+		for (int i = 0; i < players.size(); i++) {
+
+			if (!hasMoat(players[i].getHand())) {
+				bool containsVictory = false;
+
+				for (int j = 0; j < players[i].getHand()->size(); j++) {
+
+					if (players[i].getHand()->at(j).isOfType("Victory")) {
+						cout << "Player " << i + 1 << " revealed a " << players[i].getHand()->at(j).getName() << "!" << endl;
+						players[i].getHand()->at(j).printCardInfo();
+
+						c = players[i].getHand()->at(j);
+						players[i].getHand()->erase(players[i].getHand()->begin() + j);
+
+						players[i].getDraw()->addCard(c);
+						containsVictory = !containsVictory;
+						break;
+					}
+
+				}
+				if (!containsVictory) {
+					cout << "Player " << i + 1 << " did not have a victory card. This is their hand: " << endl;
+					for (int j = 0; j < players[i].getHand()->size(); j++) {
+						players[i].getHand()->at(j).printCardInfo();
+					}
+				}
+			}
+			else {
+				cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+			}
+			
+		}
+	}
+
+	else if (cardName == "Merchant") {
+		mBuff += 1;
+	}
+
+	else if (cardName == "Throne Room") {
+		int numOtherActions = 0;
+		bool cardPlayed = false;
+
+		for (int i = 0; i < hand->size(); i++) {
+			if (hand->at(i).isOfType("Action")) {
+				numOtherActions++;
+			}
+		}
+
+		if (numOtherActions > 0) {
+			
+			string choice;
+			do {
+
+				cout << "Play an action card in your hand, it will be played twice - play [card name]" << endl << endl;
+
+				getline(cin, choice);
+
+				for (int i = 0; i < hand->size(); i++) {
+					if (hand->at(i).getName() == choice.substr(5)) {
+						cardPlayed = !cardPlayed;
+						Card c = hand->at(i);
+
+						//Card will be imedietly be put into discard, but really should be put onto the in-Play area, will fix this someday.
+						hand->erase(hand->begin() + i);
+						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+
+						discard->addCard(c);
+						break;
+
+					}
+				}
+				if (!cardPlayed) {
+					cout << "Oops, looks like you either entered a card name incorrectly, the card is not in this game, or entered something else other than 'play [card name]'." << endl << endl;
+				}
+
+
+			} while (!cardPlayed);
+		}
+		else {
+			//This isn't really neccisary, will delete later
+			cout << "No other action cards in your hand" << endl << endl;
+		}
+
+	}
+
+	//If not any of these, this is either a custom card, a dlc card (will be implemented at a later date), or is moat, which is implemented in a different way.
 }

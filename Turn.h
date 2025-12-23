@@ -23,6 +23,8 @@ private:
 	int buys;
 	int coins;
 
+	int merchantBuff;
+
 	vector<Card> inPlay;
 
 	Board* board;
