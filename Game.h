@@ -9,15 +9,22 @@ class Game {
 public:
 
 	Game();
-	Game(vector<Player> players, Board board);
+	~Game();
+	Game(Player you, vector<Player> players, Board board);
 
 	void Play();
 
+	
+
 private:
 
-	int currentPlayerTurn;
+	void gameEnd();
 
-	vector<Player> gamePlayers;
-	Board b;
+	int currentTurnCount;
+
+	Player personPlayer;
+
+	vector<Player> otherPlayers;
+	Board* b;
 
 };

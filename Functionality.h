@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Deck.h";
+#include "Deck.h"
 #include "Turn.h"
 #include "Player.h"
 

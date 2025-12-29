@@ -2,9 +2,12 @@
 #include <iostream>
 #include <vector>
 #include "Board.h"
-#include "Player.h"
+#include "Card.h"
+#include "Deck.h"
 
 using namespace std;
+
+class Player;
 
 class Turn
 {

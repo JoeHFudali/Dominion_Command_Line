@@ -1,6 +1,11 @@
 #include "Player.h"
 
+
 Player::Player() {
+	//do nothing
+}
+
+Player::Player(string pName) {
 
 	//coins = 0;
 
@@ -16,7 +21,22 @@ Player::Player() {
 		drawPile->addCard(estate);
 	}
 
+	name = pName;
 
+}
+
+Player::~Player() {
+	drawPile->deleteDeck();
+	delete drawPile;
+	drawPile = 0;
+
+	discardPile->deleteDeck();
+	delete discardPile;
+	discardPile = 0;
+
+	hand->clear();
+	delete hand;
+	hand = 0;
 }
 
 void Player::takeTurn(Board* b, vector<Player>& players) {
@@ -27,12 +47,17 @@ void Player::takeTurn(Board* b, vector<Player>& players) {
 
 }
 
+void Player::ComputerTurn(Board* b, vector<Player>& oPlayers) {
+	Turn t(oPlayers, hand, drawPile, discardPile, b);
+	//Need to do some decision here, have the computer decide what cards to choose, whether that is randomly or through a heuristic, or through a NN.
+	resetHand();
+}
+
+
+
 void Player::resetHand() {
-	for (int i = 0; i < hand->size(); i++) {
-		Card tCard = (*hand)[i];
-		discardPile->addCard(tCard);
-	}
-	hand->clear();
+	
+	discardHand();
 
 	for (int i = 0; i < 5; i++) {
 		if (drawPile->totalCards() < 1) {
@@ -44,10 +69,18 @@ void Player::resetHand() {
 	}
 }
 
+void Player::discardHand() {
+	for (int i = 0; i < hand->size(); i++) {
+		Card tCard = (*hand)[i];
+		discardPile->addCard(tCard);
+	}
+	hand->clear();
+}
+
 void Player::discardToDraw() {
 	discardPile->shuffleDeck();
 	
-	drawPile->deleteDeck();
+	//drawPile->deleteDeck();
 	*drawPile = *discardPile;
 
 	discardPile->deleteDeck();
@@ -65,4 +98,15 @@ Deck* Player::getDiscard() {
 
 vector<Card>* Player::getHand() {
 	return hand;
+}
+
+string Player::getName() {
+	return name;
+}
+
+int Player::totalVP() {
+	int retVal = 0;
+	retVal += drawPile->sumVP() + discardPile->sumVP();
+
+	return retVal;
 }

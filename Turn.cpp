@@ -1,4 +1,5 @@
 #include "Turn.h"
+#include "Player.h"
 #include "Functionality.h"
 
 
@@ -37,14 +38,16 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 
 void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
 	string cName;
-	vector<int> actionsChoices;
+	vector<Card> actionsChoices;
+	vector<int> actionIndexHand;
 	cout << "Action turn. Cards available: " << endl;
 
 	for (int i = 0; i < hand->size(); i++) {
 		for (int j = 0; j < (*hand)[i].getTypes().size(); j++) {
 			if ((*hand)[i].getTypes()[j] == "Action") {
 				cout << i + 1 << ". " << (*hand)[i].getName();
-				actionsChoices.push_back(i);
+				actionsChoices.push_back((*hand)[i]);
+				actionIndexHand.push_back(i);
 				break;
 			}
 			cout << "\n\n";
@@ -57,14 +60,15 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 		cout << "Action play: " << endl;
 		getline(cin, cName);
 		int choice = stoi(cName);
-		//Somehow get card based on index here
-		Card c;
+
+		Card c = actionsChoices[choice];
 
 		Functionality action;
 
 		//Do action - board neeeds to be changed here
 		action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
-		//hand->erase(hand->begin + [some index variable]);
+		hand->erase(hand->begin() + actionIndexHand[choice]);
+		actionsChoices.erase(actionsChoices.begin() + choice);
 		
 		//Then put the current card "in play," A.K.A. put it in our vector in the turn private data
 		inPlay.push_back(c);

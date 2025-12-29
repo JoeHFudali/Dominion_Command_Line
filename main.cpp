@@ -42,7 +42,7 @@ int main() {
 
 	
 	Board b;
-	b.printCardInfo("Witch");
+	b.printCardInfo("Moat");
 
 	
 
