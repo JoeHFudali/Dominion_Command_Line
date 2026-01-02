@@ -91,6 +91,27 @@ Card Board::findCardOnBoard(string name) {
 	return retVal;
 }
 
+bool Board::isCardAvaliable(string name) {
+	bool retVal = false;
+	for (int i = 0; i < baseDecks.size(); i++) {
+		if (baseDecks[i].getSingleCard(0).getName() == name && !baseDecks[i].isEmptyDeck()) {
+			retVal = !retVal;
+			break;
+		}
+	}
+
+	if (!retVal) {
+		for (int i = 0; i < kingdomDecks.size(); i++) {
+			if (kingdomDecks[i].getSingleCard(0).getName() == name && !kingdomDecks[i].isEmptyDeck()) {
+				retVal = !retVal;
+				break;
+			}
+		}
+	}
+
+	return retVal;
+}
+
 Card Board::takeCard(string name) {
 	Card retVal;
 	bool found = false;
@@ -195,6 +216,7 @@ void Board::printCardInfo(string name) {
 	for (int i = 0; i < baseDecks.size(); i++) {
 		if (!baseDecks[i].isEmptyDeck() && baseDecks[i].getSingleCard(0).getName() == name) {
 			baseDecks[i].getSingleCard(0).printCardInfo();
+			cout << "Num of cards in deck: " << baseDecks[i].totalCards() << endl << endl;
 			found = true;
 			break;
 		}
@@ -204,6 +226,7 @@ void Board::printCardInfo(string name) {
 		for (int i = 0; i < kingdomDecks.size(); i++) {
 			if (!kingdomDecks[i].isEmptyDeck() && kingdomDecks[i].getSingleCard(0).getName() == name) {
 				kingdomDecks[i].getSingleCard(0).printCardInfo();
+				cout << "Num of cards in deck: " << kingdomDecks[i].totalCards() << endl << endl;
 				found = true;
 				break;
 			}

@@ -12,7 +12,7 @@ void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand
 
 		if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" Card") != string::npos) {
 			int amount = c.getDesc()[i][1] - '0';
-			addCards(hand, draw, amount);
+			addCards(hand, draw, discard, amount);
 		}
 
 		else if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" Action") != string::npos) {
@@ -49,8 +49,9 @@ void Functionality::addCoins(int& coinCount, int amount) {
 	coinCount += amount;
 }
 
-void Functionality::addCards(vector<Card>* hand, Deck* draw, int amount) {
+void Functionality::addCards(vector<Card>* hand, Deck* draw, Deck* discard, int amount) {
 	for (int i = 0; i < amount; i++) {
+		isDrawEmpty(draw, discard);
 		Card c = draw->takeCard();
 		hand->push_back(c);
 	}
@@ -67,6 +68,16 @@ bool Functionality::hasMoat(vector<Card>* hand) {
 	}
 
 	return retVal;
+}
+
+void Functionality::isDrawEmpty(Deck* draw, Deck* discard) {
+	if (draw->totalCards() == 0) {
+		discard->shuffleDeck();
+
+		*draw = *discard;
+
+		discard->deleteDeck();
+	}
 }
 
 //Need to come back to this function later, many of the cases are inefficient, and can be reorganized more efficiently
@@ -102,6 +113,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 	else if (cardName == "Vassal") {
 		bool actionOrNot = false;
+		isDrawEmpty(draw, discard);
 		Card c = draw->takeCard();
 		for (int i = 0; i < c.getTypes().size(); i++) {
 			if (c.getTypes()[i] == "Action") {
@@ -167,7 +179,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 									b.printCardInfo(cName2);
 
 								}
-								else if (choice2.find("buy ") != string::npos) {
+								else if (choice2.find("buy ") != string::npos && b.isCardAvaliable(choice2.substr(4))) {
 									string cName2 = choice2.substr(4);
 									Card cToBuy = b.findCardOnBoard(cName2);
 									if (price >= cToBuy.getCost()) {
@@ -177,12 +189,12 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 										break;
 									}
 									else {
-										cout << "Oops, looks like you do not have enough money to buy this card." << endl << endl;
+										cout << "Oops, looks like you do not have enough money to buy this card" << endl << endl;
 										choice2 = "";
 									}
 								}
 								else {
-									cout << "That is not a choice! Either look at a card, buy a card, or skip you buy" << endl << endl;
+									cout << "That is not a choice, or the card pile is empty! Either look at a card, buy a card (that is still in stock), or skip your buy" << endl << endl;
 								}
 
 							} while (choice2[0] != 'b');
@@ -229,6 +241,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		for (int i = 0; i < toDiscard.size(); i++) {
 			//Check for draw being empty, will implement later
 			discard->addCard(toDiscard[i]);
+			isDrawEmpty(draw, discard);
 			hand->push_back(draw->takeCard());
 		}
 		toDiscard.clear();
@@ -280,7 +293,9 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			cout << i + 1 << ". " << discard->getSingleCard(i).getName() << endl;
 		}
 
-		cout << "Which card would you like to put onto the top of your deck? (Enter in the specific card name)" << endl << endl;
+		if (discard->totalCards() > 0) {
+			cout << "Which card would you like to put onto the top of your deck? (Enter in the specific card name)" << endl << endl;
+		}
 
 		string choice = "";
 
@@ -298,7 +313,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				cout << "Looks like you entered in a card name that is not in your discard. Please enter a card name that is actually in your discard deck" << endl << endl;
 			}
 
-		} while (true);
+		} while (true && discard->totalCards() > 0);
 
 		
 	}
@@ -318,7 +333,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				b.printCardInfo(cName2);
 
 			}
-			else if (choice.find("buy ") != string::npos) {
+			else if (choice.find("buy ") != string::npos && b.isCardAvaliable(choice.substr(4))) {
 				string cName2 = choice.substr(4);
 				Card cToBuy = b.findCardOnBoard(cName2);
 				if (cToBuy.getCost() <= 4) {
@@ -332,7 +347,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				}
 			}
 			else {
-				cout << "That is not a choice! Either look at a card, or gain a card that costs up to 4$" << endl << endl;
+				cout << "That is not a choice, or the card pile is emptied! Either look at a card, or gain a card (that is still in stock) that costs up to 4$" << endl << endl;
 			}
 
 		} while (choice[0] != 'b');
@@ -367,7 +382,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 								b.printCardInfo(cName2);
 
 							}
-							else if (choice2.find("buy ") != string::npos) {
+							else if (choice2.find("buy ") != string::npos && b.isCardAvaliable(choice2.substr(4))) {
 								string cName2 = choice2.substr(4);
 								Card cToBuy = b.findCardOnBoard(cName2);
 								if (cToBuy.getCost() <= cToBuy.getCost() + 3 && cToBuy.isOfType("Treasure")) {
@@ -376,12 +391,12 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 									break;
 								}
 								else {
-									cout << "Oops, looks like this card is either not a treasure, not on the board, or is too expensive" << endl << endl;
+									cout << "Oops, looks like this card is either not a treasure, not on the board, has been emptied, or is too expensive" << endl << endl;
 									choice2 = "";
 								}
 							}
 							else {
-								cout << "That is not a choice! Either look at a card, or gain a card that costs up to 4$" << endl << endl;
+								cout << "That is not a choice, or the card pile is empty! Either look at a card, or gain a treasure up to 3$ more than the trashed treasure (that is still in stock)" << endl << endl;
 							}
 
 						} while (choice2[0] != 'b');
@@ -415,7 +430,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				b.printCardInfo(cName2);
 
 			}
-			else if (choice.find("buy ") != string::npos) {
+			else if (choice.find("buy ") != string::npos && b.isCardAvaliable(choice.substr(4))) {
 				string cName2 = choice.substr(4);
 				Card cToBuy = b.findCardOnBoard(cName2);
 				if (cToBuy.getCost() <= 5) {
@@ -429,7 +444,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				}
 			}
 			else {
-				cout << "That is not a choice! Either look at a card, or gain a card that costs up to 4$" << endl << endl;
+				cout << "That is not a choice, or the card pile is empty! Either look at a card, or gain a card that costs up to 5$ (that is still in stock) " << endl << endl;
 			}
 
 		} while (choice[0] != 'b');
@@ -508,7 +523,10 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		vector<Card> topTwoCards;
 
+		isDrawEmpty(draw, discard);
 		topTwoCards.push_back(draw->takeCard());
+
+		isDrawEmpty(draw, discard);
 		topTwoCards.push_back(draw->takeCard());
 
 		cout << "Looks at the top two cards of your deck, and either trash, discard, or put them back on top. You can do this to one or both of the cards, and you don't have to do the same action for both" << endl << endl;
@@ -560,6 +578,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		while (hand->size() < 7) {
 			//Check to see if draw is empty, and then replace it. will do later
+			isDrawEmpty(draw, discard);
 			Card c = draw->takeCard();
 			if (!c.isOfType("Action")) {
 				hand->push_back(c);
@@ -604,7 +623,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		if (b.getBase(6).totalCards() > 0) {
 			for (int i = 0; i < players.size(); i++) {
-				if (!hasMoat(players[i].getHand())) {
+				if (!hasMoat(players[i].getHand()) || b.isCardAvaliable("Witch")) {
 					Card witch = b.takeCard("Witch");
 
 					players[i].getDiscard()->addCard(witch);
@@ -613,8 +632,11 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 						break;
 					}
 				}
-				else {
+				else if(hasMoat(players[i].getHand())){
 					cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+				}
+				else {
+					cout << "No more witches left on the board. Attack failed." << endl << endl;
 				}
 			}
 		}
@@ -625,7 +647,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 	else if (cardName == "Council Room") {
 		for (int i = 0; i < players.size(); i++) {
-			//Need to once again check here to see if draw deck is empty or not
+			isDrawEmpty(players[i].getDraw(), players[i].getDiscard());
 			Card c = players[i].getDraw()->takeCard();
 
 			players[i].getHand()->push_back(c);
@@ -636,7 +658,6 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 	else if (cardName == "Militia") {
 
 		for (int i = 0; i < players.size(); i++) {
-			//Need to check if players[i[ has moat or not
 
 			if (!hasMoat(players[i].getHand())) {
 				while (players[i].getHand()->size() > 3) {
@@ -658,13 +679,14 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 	else if (cardName == "Bandit") {
 
 		for (int i = 0; i < players.size(); i++) {
-			//Need to check if players[i] has a moat or not
 
 			if (!hasMoat(players[i].getHand())) {
 				vector<Card> topTwoCards;
 
-				//Need to once again check to see if draw is empty or not
+				isDrawEmpty(players[i].getDraw(), players[i].getDiscard());
 				topTwoCards.push_back(players[i].getDraw()->takeCard());
+
+				isDrawEmpty(players[i].getDraw(), players[i].getDiscard());
 				topTwoCards.push_back(players[i].getDraw()->takeCard());
 
 				if (topTwoCards[0].getName() == "Gold" || topTwoCards[0].getName() == "Silver") {
@@ -696,7 +718,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		Card c = b.takeCard("Silver");
 
 		draw->addCard(c);
-		//Need to see if players[i] has a moat or not in their hand
+
 		for (int i = 0; i < players.size(); i++) {
 
 			if (!hasMoat(players[i].getHand())) {

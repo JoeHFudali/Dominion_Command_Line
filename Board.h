@@ -12,6 +12,7 @@ public:
 	void addToTrash(Card c);
 
 	Card findCardOnBoard(string name);
+	bool isCardAvaliable(string name);
 
 	Card takeCard(string name);
 

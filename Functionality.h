@@ -18,9 +18,11 @@ private:
 	void addActions(int& actionCount, int amount);
 	void addBuys(int& buyCount, int amount);
 	void addCoins(int& coinCount, int amount);
-	void addCards(vector<Card>* hand, Deck* draw, int amount);
+	void addCards(vector<Card>* hand, Deck* draw, Deck* discard, int amount);
 
 	bool hasMoat(vector<Card>* hand);
+
+	void isDrawEmpty(Deck* draw, Deck* discard);
 
 	void decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff);
 
