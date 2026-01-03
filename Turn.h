@@ -14,13 +14,16 @@ class Turn
 public:
 
 	Turn();
-	Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b);
+	Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b, bool isAgent);
 
 private:
 
 	void takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
 	void takeBuys(vector<Card>* hand, Deck* draw, Deck* discard);
 	void cleanUp(vector<Card>* hand, Deck* draw, Deck* discard);
+
+	void agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
+	void agentBuys(vector<Card>* hand, Deck* draw, Deck* discard);
 
 	int actions;
 	int buys;

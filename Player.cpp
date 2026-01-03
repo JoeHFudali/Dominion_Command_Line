@@ -40,15 +40,19 @@ Player::~Player() {
 }
 
 void Player::takeTurn(Board* b, vector<Player>& players) {
-	Turn t(players, hand, drawPile, discardPile, b);
+	Turn t(players, hand, drawPile, discardPile, b, false);
 	//Turn class will reset the cards in play on it's own, this class will reset the hand and draw new cards (50/50 clean up between these two classes)
+	
 	resetHand();
 
 
 }
 
 void Player::ComputerTurn(Board* b, vector<Player>& oPlayers) {
-	Turn t(oPlayers, hand, drawPile, discardPile, b);
+	Turn t(oPlayers, hand, drawPile, discardPile, b, true);
+
+	
+
 	//Need to do some decision here, have the computer decide what cards to choose, whether that is randomly or through a heuristic, or through a NN.
 	resetHand();
 }

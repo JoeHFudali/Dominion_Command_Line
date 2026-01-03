@@ -715,9 +715,13 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 	else if (cardName == "Bureaucrat") {
 		//This function acts a bit differently than normal game. This goes through the other players hand and will reveal the first victory card, not one of their choosing. 
 		//Have to also edit this function in board to check for empty decks and return nothing
-		Card c = b.takeCard("Silver");
+		Card c;
+		if (b.isCardAvaliable("Silver")) {
+			c = b.takeCard("Silver");
 
-		draw->addCard(c);
+			draw->addCard(c);
+		}
+		
 
 		for (int i = 0; i < players.size(); i++) {
 

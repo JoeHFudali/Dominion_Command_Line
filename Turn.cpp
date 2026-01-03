@@ -17,7 +17,7 @@ Turn::Turn() {
 	//Do nothing for now
 }
 
-Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b) {
+Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b, bool isAgent) {
 
 	actions = 1;
 	buys = 1;
@@ -28,11 +28,21 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 
 	board = b;
 
-	takeActions(players, hand, draw, discard);
+	if (!isAgent) {
+		takeActions(players, hand, draw, discard);
 
-	takeBuys(hand, draw, discard);
+		takeBuys(hand, draw, discard);
 
-	cleanUp(hand, draw, discard);
+		cleanUp(hand, draw, discard);
+	}
+	else {
+		agentActions(players, hand, draw, discard);
+
+		agentBuys(hand, draw, discard);
+
+		cleanUp(hand, draw, discard);
+	}
+	
 
 }
 
@@ -56,7 +66,7 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 
 	cout << endl;
 
-	while (actions > 0) {
+	while (actions > 0 || actionsChoices.size() > 0) {
 		cout << "Action play: " << endl;
 		getline(cin, cName);
 		int choice = stoi(cName);
@@ -102,12 +112,14 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 			cout << "2. Buy a card - buy [card name]" << endl;
 			cout << "3. Pass this buy - pass" << endl;
 
+			getline(cin, choice);
+
 			if(choice.find("look ") != string::npos) {
 				string cName = choice.substr(5);
 				board->printCardInfo(cName);
 
 			}
-			else if (choice.find("buy ") != string::npos) {
+			else if (choice.find("buy ") != string::npos && board->isCardAvaliable(choice.substr(4))) {
 				string cName = choice.substr(4);
 				Card cToBuy = board->findCardOnBoard(cName);
 				if (coins >= cToBuy.getCost()) {
@@ -125,7 +137,8 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 				break;
 			}
 			else {
-				cout << "That is not a choice! Either look at a card, buy a card, or skip you buy" << endl << endl;
+				cout << "That is not a choice, or that card pile is empty! Either look at a card, buy a card (that is still in stock), or skip you buy" << endl << endl;
+				choice = "";
 			}
 
 		} while (choice[0] != 'b' || choice[0] != 'p');
@@ -145,5 +158,297 @@ void Turn::cleanUp(vector<Card>* hand, Deck* draw, Deck* discard) {
 
 	inPlay.clear();
 
+
+}
+
+void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
+
+	for (int i = 0; i < hand->size(); i++) {
+		if (actions == 0) {
+			break;
+		}
+
+		if (hand->at(i).isOfType("Action")) {
+			Functionality action;
+			Card c = hand->at(i);
+			hand->erase(hand->begin() + i);
+			action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
+
+			inPlay.push_back(c);
+			actions--;
+		}
+
+		
+	}
+
+
+}
+
+void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
+
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).getName() == "Silver") {
+			coins += merchantBuff;
+			break;
+		}
+	}
+
+	while (buys > 0) {
+		Card cToBuy;
+		int randIndex;
+
+		if (coins < 2) {
+			randIndex = rand();
+
+			if (randIndex % 2 == 0) {
+				//do nothing
+			}
+			else {
+				cToBuy = board->takeCard("Copper");
+				discard->addCard(cToBuy);
+
+			}
+		}
+
+		else if (coins == 2) {
+			randIndex = rand();
+
+			if (randIndex % 2 == 0) {
+				if (board->isCardAvaliable("Estate")) {
+					cToBuy = board->takeCard("Estate");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				
+			}
+
+			else {
+				if (board->isCardAvaliable("Moat")) {
+					cToBuy = board->takeCard("Moat");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Chapel")) {
+					cToBuy = board->takeCard("Chapel");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Cellar")) {
+					cToBuy = board->takeCard("Cellar");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+			}
+		}
+
+		else if (coins == 3) {
+			randIndex = rand();
+
+			if (randIndex % 2 == 0) {
+				cToBuy = board->takeCard("Silver");
+
+				discard->addCard(cToBuy);
+				coins -= cToBuy.getCost();
+			}
+			else {
+				if (board->isCardAvaliable("Village")) {
+					cToBuy = board->takeCard("Village");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Vassal")) {
+					cToBuy = board->takeCard("Vassal");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Merchant")) {
+					cToBuy = board->takeCard("Merchant");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Workshop")) {
+					cToBuy = board->takeCard("Workshop");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Harbinger")) {
+					cToBuy = board->takeCard("Harbinger");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+			}
+		}
+
+		else if (coins == 4) {
+			randIndex = rand();
+
+			if (randIndex % 2 == 0) {
+				cToBuy = board->takeCard("Silver");
+
+				discard->addCard(cToBuy);
+				coins -= cToBuy.getCost();
+			}
+			else {
+				if (board->isCardAvaliable("Militia")) {
+					cToBuy = board->takeCard("Militia");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Poacher")) {
+					cToBuy = board->takeCard("Poacher");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Remodel")) {
+					cToBuy = board->takeCard("Remodel");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Throne Room")) {
+					cToBuy = board->takeCard("Throne Room");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("MoneyLender")) {
+					cToBuy = board->takeCard("MoneyLender");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Gardens")) {
+					cToBuy = board->takeCard("Gardens");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Smithy")) {
+					cToBuy = board->takeCard("Smithy");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Bureaucrat")) {
+					cToBuy = board->takeCard("Bureaucrat");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+			}
+		}
+
+		else if (coins == 5) {
+			randIndex = rand();
+
+			if (randIndex % 2 == 0) {
+				if (board->isCardAvaliable("Duchy")) {
+					cToBuy = board->takeCard("Duchy");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+			}
+			else {
+				if (board->isCardAvaliable("Festival")) {
+					cToBuy = board->takeCard("Festival");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Market")) {
+					cToBuy = board->takeCard("Market");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Sentry")) {
+					cToBuy = board->takeCard("Sentry");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Witch")) {
+					cToBuy = board->takeCard("Witch");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Laboratory")) {
+					cToBuy = board->takeCard("Laboratory");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Mine")) {
+					cToBuy = board->takeCard("Mine");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Library")) {
+					cToBuy = board->takeCard("Library");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Bandit")) {
+					cToBuy = board->takeCard("Bandit");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+				else if (board->isCardAvaliable("Council Room")) {
+					cToBuy = board->takeCard("Council Room");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+			}
+		}
+
+		else if (coins == 6) {
+			randIndex = rand();
+
+			if (randIndex % 2 == 0) {
+				cToBuy = board->takeCard("Gold");
+
+				discard->addCard(cToBuy);
+				coins -= cToBuy.getCost();
+			}
+			else {
+				if (board->isCardAvaliable("Artisan")) {
+					cToBuy = board->takeCard("Artisan");
+
+					discard->addCard(cToBuy);
+					coins -= cToBuy.getCost();
+				}
+			}
+		}
+
+		else if (coins >= 8) {
+
+			if (board->isCardAvaliable("Province")) {
+				cToBuy = board->takeCard("Province");
+
+				discard->addCard(cToBuy);
+				coins -= cToBuy.getCost();
+			}
+		}
+
+
+		buys--;
+	}
 
 }
