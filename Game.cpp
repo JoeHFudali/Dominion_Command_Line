@@ -26,6 +26,13 @@ Game::Game(Player you, vector<Player> players, Board board) {
 Game::~Game() {
 	delete b;
 	b = 0;
+
+	personPlayer.deletePlayer();
+
+	for (int i = 0; i < otherPlayers.size(); i++) {
+		otherPlayers[i].deletePlayer();
+	}
+	
 }
 
 void Game::Play() {

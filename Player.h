@@ -10,7 +10,7 @@ public:
 
 	Player();
 	Player(string pName);
-	~Player();
+	void deletePlayer();
 	
 	void resetHand();
 	void discardHand();
@@ -30,6 +30,10 @@ public:
 
 
 private:
+
+	
+
+
 	string name;
 
 	Deck* drawPile;

@@ -3,7 +3,7 @@
 using namespace std;
 
 Card::Card() {
-	name = "Coppper";
+	name = "Copper";
 	cost = 0;
 
 	types.push_back("Treasure");
@@ -135,8 +135,8 @@ void Card::printCardInfo() {
 
 bool Card::isOfType(string type) {
 	bool retVal = false;
-	for (int i = 0; i < description.size(); i++) {
-		if (description[i] == type) {
+	for (int i = 0; i < types.size(); i++) {
+		if (types[i] == type) {
 			retVal = !retVal;
 			break;
 		}

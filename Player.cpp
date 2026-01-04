@@ -13,6 +13,10 @@ Player::Player(string pName) {
 
 	Card estate("Estate", 2, { "Victory" }, { "1 VP" });
 
+	drawPile = new Deck();
+	discardPile = new Deck();
+	hand = new vector<Card>();
+
 	for (int i = 0; i < 7; i++) {
 		drawPile->addCard(copper);
 	}
@@ -21,11 +25,17 @@ Player::Player(string pName) {
 		drawPile->addCard(estate);
 	}
 
+	drawPile->shuffleDeck();
+
 	name = pName;
+
+	for (int i = 0; i < 5; i++) {
+		hand->push_back(drawPile->takeCard());
+	}
 
 }
 
-Player::~Player() {
+void Player::deletePlayer() {
 	drawPile->deleteDeck();
 	delete drawPile;
 	drawPile = 0;

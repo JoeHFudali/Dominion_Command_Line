@@ -28,6 +28,10 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 
 	board = b;
 
+	for (int i = 0; i < hand->size(); i++) {
+		hand->at(i).printCardInfo();
+	}
+
 	if (!isAgent) {
 		takeActions(players, hand, draw, discard);
 
@@ -66,7 +70,7 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 
 	cout << endl;
 
-	while (actions > 0 || actionsChoices.size() > 0) {
+	while (actions > 0 && actionsChoices.size() > 0) {
 		cout << "Action play: " << endl;
 		getline(cin, cName);
 		int choice = stoi(cName);
@@ -95,6 +99,12 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 		if (hand->at(i).getName() == "Silver") {
 			coins += merchantBuff;
 			break;
+		}
+	}
+
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).isOfType("Treasure")) {
+			coins += hand->at(i).getDesc()[0][0] - '0';
 		}
 	}
 
@@ -151,6 +161,8 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 }
 
 void Turn::cleanUp(vector<Card>* hand, Deck* draw, Deck* discard) {
+	cout << "Clean up phase!" << endl << endl;
+
 	for (int i = 0; i < inPlay.size(); i++) {
 		Card c = inPlay[i];
 		discard->addCard(c);
@@ -190,6 +202,12 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 		if (hand->at(i).getName() == "Silver") {
 			coins += merchantBuff;
 			break;
+		}
+	}
+
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).isOfType("Treasure")) {
+			coins += hand->at(i).getDesc()[0][0] - '0';
 		}
 	}
 
@@ -447,7 +465,7 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 			}
 		}
 
-
+		cout << "Agent bought: " << cToBuy.getName() << endl << endl;
 		buys--;
 	}
 
