@@ -130,6 +130,8 @@ void Card::printCardInfo() {
 	cout << setw(typeLength) << "" << "|" << endl;
 	cout << "+" << setfill('-') << setw(cardWidth - 2) << "" << "+" << endl << endl;
 
+	cout << setfill(' ');
+
 	
 }
 

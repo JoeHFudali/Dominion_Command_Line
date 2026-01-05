@@ -243,3 +243,7 @@ void Board::printCardInfo(string name) {
 Deck Board::getBase(int index) {
 	return baseDecks[index];
 }
+
+Deck Board::getKingdom(int index) {
+	return kingdomDecks[index];
+}

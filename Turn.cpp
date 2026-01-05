@@ -28,11 +28,14 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 
 	board = b;
 
-	for (int i = 0; i < hand->size(); i++) {
-		hand->at(i).printCardInfo();
-	}
+	
 
 	if (!isAgent) {
+
+		for (int i = 0; i < hand->size(); i++) {
+			hand->at(i).printCardInfo();
+		}
+
 		takeActions(players, hand, draw, discard);
 
 		takeBuys(hand, draw, discard);
@@ -54,28 +57,36 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 	string cName;
 	vector<Card> actionsChoices;
 	vector<int> actionIndexHand;
+
 	cout << "Action turn. Cards available: " << endl;
+
+	int num = 1;
 
 	for (int i = 0; i < hand->size(); i++) {
 		for (int j = 0; j < (*hand)[i].getTypes().size(); j++) {
 			if ((*hand)[i].getTypes()[j] == "Action") {
-				cout << i + 1 << ". " << (*hand)[i].getName();
+				cout << num << ". " << (*hand)[i].getName();
 				actionsChoices.push_back((*hand)[i]);
 				actionIndexHand.push_back(i);
+				cout << "\n\n";
+				num++;
 				break;
 			}
-			cout << "\n\n";
+			
 		}
 	}
 
 	cout << endl;
 
 	while (actions > 0 && actionsChoices.size() > 0) {
+
+		printBoardAndPlayerDecks(hand, draw, discard);
+
 		cout << "Action play: " << endl;
 		getline(cin, cName);
 		int choice = stoi(cName);
 
-		Card c = actionsChoices[choice];
+		Card c = actionsChoices[choice - 1];
 
 		Functionality action;
 
@@ -111,6 +122,10 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 
 
 	for (int i = 0; i < buys; i++) {
+
+		printBoardAndPlayerDecks(hand, draw, discard);
+
+
 		cout << "Coins: " << coins << endl;
 		cout << "Num of buys: " << buys - i << endl;
 
@@ -161,6 +176,7 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 }
 
 void Turn::cleanUp(vector<Card>* hand, Deck* draw, Deck* discard) {
+
 	cout << "Clean up phase!" << endl << endl;
 
 	for (int i = 0; i < inPlay.size(); i++) {
@@ -189,10 +205,8 @@ void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw,
 			inPlay.push_back(c);
 			actions--;
 		}
-
 		
 	}
-
 
 }
 
@@ -468,5 +482,51 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 		cout << "Agent bought: " << cToBuy.getName() << endl << endl;
 		buys--;
 	}
+
+}
+
+void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard) {
+	cout << "Current Board/Player State:" << endl;
+
+	//Printing out the board
+	for (int i = 0; i < 7; i++) {
+		cout << setw(10) << board->getBase(i).getSingleCard(0).getName() << " ";
+	}
+	cout << endl;
+
+	for (int i = 0; i < 7; i++) {
+		cout << setw(10) << board->getBase(i).totalCards() << " ";
+	}
+	cout << endl << endl;
+
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 5; j++) {
+			cout << setw(10) << board->getKingdom((i * 5) + j).getSingleCard(0).getName() << " ";
+		}
+		cout << endl;
+
+		for (int j = 0; j < 5; j++) {
+			cout << setw(10) << board->getKingdom((i * 5) + j).totalCards() << " ";
+		}
+		cout << endl << endl << endl;
+	}
+
+
+	//Printing out your hand/decks
+	cout << setw(10) << "Draw" << " ";
+
+	for (int i = 0; i < hand->size(); i++) {
+		cout << setw(10) << hand->at(i).getName() << " ";
+	}
+
+	if (discard->totalCards() > 0) {
+		cout << setw(10) << "Discard - " << discard->getSingleCard(0).getName() << endl;
+	}
+	else {
+		cout << setw(10) << "Discard" << endl;
+	}
+
+	cout << setw(10) << draw->totalCards() << " " << setw(60) << discard->totalCards() << endl << endl;
+
 
 }

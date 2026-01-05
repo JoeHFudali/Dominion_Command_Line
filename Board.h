@@ -25,6 +25,7 @@ public:
 	void printCardInfo(string name);
 
 	Deck getBase(int index);
+	Deck getKingdom(int index);
 
 
 private:

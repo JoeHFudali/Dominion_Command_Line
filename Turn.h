@@ -25,6 +25,8 @@ private:
 	void agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
 	void agentBuys(vector<Card>* hand, Deck* draw, Deck* discard);
 
+	void printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard);
+
 	int actions;
 	int buys;
 	int coins;
