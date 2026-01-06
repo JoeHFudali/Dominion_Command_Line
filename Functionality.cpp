@@ -21,12 +21,12 @@ void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand
 		}
 
 		else if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" Buy") != string::npos) {
-			int amount = c.getDesc()[i][1];
+			int amount = c.getDesc()[i][1] - '0';
 			addBuys(buyCount, amount);
 		}
 
 		else if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" $") != string::npos) {
-			int amount = c.getDesc()[i][1];
+			int amount = c.getDesc()[i][1] - '0';
 			addCoins(coinCount, amount);
 		}
 
@@ -54,6 +54,8 @@ void Functionality::addCards(vector<Card>* hand, Deck* draw, Deck* discard, int 
 		isDrawEmpty(draw, discard);
 		Card c = draw->takeCard();
 		hand->push_back(c);
+
+		cout << "Pulled a " << c.getName() << " into hand" << endl;
 	}
 
 }
@@ -336,15 +338,19 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			else if (choice.find("buy ") != string::npos && b.isCardAvaliable(choice.substr(4))) {
 				string cName2 = choice.substr(4);
 				Card cToBuy = b.findCardOnBoard(cName2);
+				
 				if (cToBuy.getCost() <= 4) {
 					Card c = b.takeCard(cName2);
+					
 					discard->addCard(c);
+					
 					break;
 				}
 				else {
 					cout << "Oops, looks like this card costs more than 4$." << endl << endl;
 					choice = "";
 				}
+				
 			}
 			else {
 				cout << "That is not a choice, or the card pile is emptied! Either look at a card, or gain a card (that is still in stock) that costs up to 4$" << endl << endl;
@@ -361,7 +367,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		do {
 			getline(cin, choice);
 
-			if (choice.substr(0, 5) == "trash") {
+			if (choice.find("trash") != string::npos) {
 
 				for (int i = 0; i < hand->size(); i++) {
 					if (hand->at(i).getName() == choice.substr(6)) {

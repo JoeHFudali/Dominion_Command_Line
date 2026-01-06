@@ -84,9 +84,9 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 
 		cout << "Action play: " << endl;
 		getline(cin, cName);
-		int choice = stoi(cName);
+		int choice = stoi(cName) - 1;
 
-		Card c = actionsChoices[choice - 1];
+		Card c = actionsChoices[choice];
 
 		Functionality action;
 
@@ -200,6 +200,9 @@ void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw,
 			Functionality action;
 			Card c = hand->at(i);
 			hand->erase(hand->begin() + i);
+
+			cout << "Agent is playing a " << c.getName() << endl;
+
 			action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
 
 			inPlay.push_back(c);
@@ -479,7 +482,7 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 			}
 		}
 
-		cout << "Agent bought: " << cToBuy.getName() << endl << endl;
+		cout << "Agent bought a " << cToBuy.getName() << endl << endl;
 		buys--;
 	}
 
@@ -508,7 +511,7 @@ void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discar
 		for (int j = 0; j < 5; j++) {
 			cout << setw(10) << board->getKingdom((i * 5) + j).totalCards() << " ";
 		}
-		cout << endl << endl << endl;
+		cout << endl << endl << endl << endl;
 	}
 
 
@@ -526,7 +529,7 @@ void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discar
 		cout << setw(10) << "Discard" << endl;
 	}
 
-	cout << setw(10) << draw->totalCards() << " " << setw(60) << discard->totalCards() << endl << endl;
+	cout << setw(10) << draw->totalCards() << setw(60) << discard->totalCards() << endl << endl;
 
 
 }

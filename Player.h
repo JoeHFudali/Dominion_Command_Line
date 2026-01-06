@@ -31,9 +31,6 @@ public:
 
 private:
 
-	
-
-
 	string name;
 
 	Deck* drawPile;
