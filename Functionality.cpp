@@ -25,7 +25,7 @@ void Functionality::PlayCard(Card c, vector<Player>& players, vector<Card>* hand
 			addBuys(buyCount, amount);
 		}
 
-		else if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" $") != string::npos) {
+		else if (c.getDesc()[i].find("+") != string::npos && c.getDesc()[i].find(" $") != string::npos && c.getDesc()[i].size() < 12) {
 			int amount = c.getDesc()[i][1] - '0';
 			addCoins(coinCount, amount);
 		}
@@ -367,47 +367,56 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		do {
 			getline(cin, choice);
 
-			if (choice.find("trash") != string::npos) {
+			if (choice.find("trash") != string::npos && b.isCardAvaliable(choice.substr(6))) {
 
-				for (int i = 0; i < hand->size(); i++) {
-					if (hand->at(i).getName() == choice.substr(6)) {
-						Card c = hand->at(i);
-						hand->erase(hand->begin() + i);
-						b.addToTrash(c);
-						//We now get a new treasure
+				Card c = b.findCardOnBoard(choice.substr(6));
 
-						string choice2;
-						do {
-							cout << "1. Look at specific card in deck - look [card name]" << endl;
-							cout << "2. Buy a card - buy [card name]" << endl;
+				if (c.isOfType("Treasure")) {
+					for (int i = 0; i < hand->size(); i++) {
+						if (hand->at(i).getName() == choice.substr(6)) {
+							c = hand->at(i);
+							hand->erase(hand->begin() + i);
+							b.addToTrash(c);
+							//We now get a new treasure
 
-							getline(cin, choice2);
+							string choice2;
+							do {
+								cout << "1. Look at specific card in deck - look [card name]" << endl;
+								cout << "2. Buy a card - buy [card name]" << endl << endl;
 
-							if (choice2.find("look ") != string::npos) {
-								string cName2 = choice2.substr(5);
-								b.printCardInfo(cName2);
+								getline(cin, choice2);
 
-							}
-							else if (choice2.find("buy ") != string::npos && b.isCardAvaliable(choice2.substr(4))) {
-								string cName2 = choice2.substr(4);
-								Card cToBuy = b.findCardOnBoard(cName2);
-								if (cToBuy.getCost() <= cToBuy.getCost() + 3 && cToBuy.isOfType("Treasure")) {
-									Card c = b.takeCard(cName2);
-									hand->push_back(c);
-									break;
+								if (choice2.find("look ") != string::npos) {
+									string cName2 = choice2.substr(5);
+									b.printCardInfo(cName2);
+
+								}
+								else if (choice2.find("buy ") != string::npos && b.isCardAvaliable(choice2.substr(4))) {
+									string cName2 = choice2.substr(4);
+									Card cToBuy = b.findCardOnBoard(cName2);
+									if (cToBuy.getCost() <= c.getCost() + 3 && cToBuy.isOfType("Treasure")) {
+										cToBuy = b.takeCard(cName2);
+										hand->push_back(cToBuy);
+										choice = "no";
+										cout << "works!" << endl;
+										break;
+									}
+									else {
+										cout << "Oops, looks like this card is either not a treasure, not on the board, has been emptied, or is too expensive" << endl << endl;
+										choice2 = "";
+									}
 								}
 								else {
-									cout << "Oops, looks like this card is either not a treasure, not on the board, has been emptied, or is too expensive" << endl << endl;
-									choice2 = "";
+									cout << "That is not a choice, or the card pile is empty! Either look at a card, or gain a treasure up to 3$ more than the trashed treasure (that is still in stock)" << endl << endl;
 								}
-							}
-							else {
-								cout << "That is not a choice, or the card pile is empty! Either look at a card, or gain a treasure up to 3$ more than the trashed treasure (that is still in stock)" << endl << endl;
-							}
 
-						} while (choice2[0] != 'b');
-						break;
+							} while (true);
+							break;
+						}
 					}
+				}
+				else {
+					cout << "Oops, looks like you are trying to trash a non-treasure card! choose a treasure card (likely Copper, Silver, or Gold) and trash one of those instead!" << endl << endl;
 				}
 
 			}
@@ -415,7 +424,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'trash' or 'no' " << endl << endl;
 			}
 
-		} while (choice != "no" || choice.substr(0, 5) != "trash");
+		} while (choice != "no");
 
 
 	}
@@ -764,7 +773,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 	}
 
 	else if (cardName == "Merchant") {
-		mBuff += 1;
+		mBuff++;
 	}
 
 	else if (cardName == "Throne Room") {

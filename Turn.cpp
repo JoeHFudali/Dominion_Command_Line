@@ -86,14 +86,24 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 		getline(cin, cName);
 		int choice = stoi(cName) - 1;
 
+		if (choice >= actionsChoices.size()) {
+			choice = actionsChoices.size() - 1;
+		}
+		else if (choice < 0) {
+			choice = 0;
+		}
+
+
 		Card c = actionsChoices[choice];
 
 		Functionality action;
 
 		//Do action - board neeeds to be changed here
-		action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
 		hand->erase(hand->begin() + actionIndexHand[choice]);
 		actionsChoices.erase(actionsChoices.begin() + choice);
+
+		action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
+		
 		
 		//Then put the current card "in play," A.K.A. put it in our vector in the turn private data
 		inPlay.push_back(c);
