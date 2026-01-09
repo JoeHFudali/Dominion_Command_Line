@@ -54,67 +54,60 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 }
 
 void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
-	string cName;
-	vector<Card> actionsChoices;
-	vector<int> actionIndexHand;
+	string choice;
+	int numActionCards = 0;
 
-	cout << "Action turn. Cards available: " << endl;
-
-	int num = 1;
+	cout << "Action phase." << endl;
+	Card c;
 
 	for (int i = 0; i < hand->size(); i++) {
-		for (int j = 0; j < (*hand)[i].getTypes().size(); j++) {
-			if ((*hand)[i].getTypes()[j] == "Action") {
-				cout << num << ". " << (*hand)[i].getName();
-				actionsChoices.push_back((*hand)[i]);
-				actionIndexHand.push_back(i);
-				cout << "\n\n";
-				num++;
-				break;
-			}
-			
+		if (hand->at(i).isOfType("Action")) {
+			numActionCards++;
 		}
 	}
+	
 
-	cout << endl;
-
-	while (actions > 0 && actionsChoices.size() > 0) {
+	while (actions > 0 && numActionCards != 0) {
 
 		printBoardAndPlayerDecks(hand, draw, discard);
 
-		cout << "Action play: " << endl;
-		getline(cin, cName);
-		int choice = stoi(cName) - 1;
+		cout << "type 'play [Action card]' to play a specific action card in your hand, or 'skip' to " << endl;
 
-		if (choice >= actionsChoices.size()) {
-			choice = actionsChoices.size() - 1;
-		}
-		else if (choice < 0) {
-			choice = 0;
-		}
+		do {
+			getline(cin, choice);
+			//Replace second condition with if the card is avaliable in the hand
+			if (choice.find("play ") != string::npos && isCardInHand(c, choice.substr(5), hand) && board->findCardOnBoard(choice.substr(5)).isOfType("Action")) {
+				Functionality action;
+
+				//Do action - board neeeds to be changed here
+
+				action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
 
 
-		Card c = actionsChoices[choice];
+				//Then put the current card "in play," A.K.A. put it in our vector in the turn private data
+				inPlay.push_back(c);
 
-		Functionality action;
+				actions--;
+				numActionCards--;
+				choice = "skip";
+			}
+			else if (choice == "skip") {
+				actions--;
+			}
+			else if (choice != "skip") {
+				cout << "Oops, looks like you either entered the wrong input, the selected card is not an action card, or the card you want to play does not exist/is not part of the current game.";
+				cout << "Please either enter 'play [Action card] with a valid action card in your hand, or 'skip' to skip the current action." << endl << endl;
+			}
 
-		//Do action - board neeeds to be changed here
-		hand->erase(hand->begin() + actionIndexHand[choice]);
-		actionsChoices.erase(actionsChoices.begin() + choice);
+		} while (choice != "skip");
 
-		action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
 		
-		
-		//Then put the current card "in play," A.K.A. put it in our vector in the turn private data
-		inPlay.push_back(c);
-
-		actions--;
 	}
 	
 }
 
 void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
-	cout << "Buy Phase" << endl << endl;
+	cout << "Buy phase" << endl << endl;
 
 	for (int i = 0; i < hand->size(); i++) {
 		if (hand->at(i).getName() == "Silver") {
@@ -199,7 +192,24 @@ void Turn::cleanUp(vector<Card>* hand, Deck* draw, Deck* discard) {
 
 }
 
+bool Turn::isCardInHand(Card& c, string name, vector<Card>* hand) {
+	bool retVal = false;
+
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).getName() == name) {
+			retVal = !retVal;
+
+			c = hand->at(i);
+			hand->erase(hand->begin() + i);
+			break;
+		}
+	}
+
+	return retVal;
+}
+
 void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
+
 
 	for (int i = 0; i < hand->size(); i++) {
 		if (actions == 0) {
@@ -533,7 +543,7 @@ void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discar
 	}
 
 	if (discard->totalCards() > 0) {
-		cout << setw(10) << "Discard - " << discard->getSingleCard(0).getName() << endl;
+		cout << setw(10) << "Discard - " << discard->getSingleCard(discard->totalCards() - 1).getName() << endl;
 	}
 	else {
 		cout << setw(10) << "Discard" << endl;

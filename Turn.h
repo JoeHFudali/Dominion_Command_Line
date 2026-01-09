@@ -27,6 +27,8 @@ private:
 
 	void printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard);
 
+	bool isCardInHand(Card& c, string name, vector<Card>* hand);
+
 	int actions;
 	int buys;
 	int coins;
