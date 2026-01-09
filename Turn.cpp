@@ -32,9 +32,9 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 
 	if (!isAgent) {
 
-		for (int i = 0; i < hand->size(); i++) {
+		/*for (int i = 0; i < hand->size(); i++) {
 			hand->at(i).printCardInfo();
-		}
+		}*/
 
 		takeActions(players, hand, draw, discard);
 

@@ -39,6 +39,25 @@ Board::Board() {
 	Card market("Market", 5, { "Action" }, { "+1 Card", "+1 Action", "+1 Buy", "+1 $" });
 	Card mine("Mine", 5, { "Action" }, { "You may trash a Treasure from your hand. Gain a Treasure to your hand costing up to 3 o more than it." });
 
+	//All Other cards in the base game
+
+	Card artisan("Artisan", 6, { "Action" }, { "Gain a card to your hand costing up to 5$. Put a card from your hand onto your deck." });
+	Card bandit("Bandit", 5, { "Action", "Attack" }, { "Gain a Gold. Each other player reveals the top 2 cards of their deck, trashes a revealed Treasure other than Copper, and discards the rest." });
+	Card bureaucrat("Bureaucrat", 4, { "Action", "Attack" }, { "Gain a Silver onto your deck. Each other player reveals a Victory card from their hand and puts it onto their deck (or reveals a hand with no Victory cards)." });
+	Card chapel("Chapel", 2, { "Action" }, { "Trash up to 4 cards from your hand." });
+	Card councilRoom("Council Room", 5, { "Action" }, { "+4 Cards", "+1 Buy", "Each other player draws a card." });
+	Card festival("Festival", 5, { "Action" }, { "+2 Actions", "+1 Buy", "+2 $" });
+	Card harbinger("Harbinger", 3, { "Action" }, { "+1 Card", "+1 Action", "Look through your discard pile. You may put a card from it onto your deck." });
+	Card laboratory("Laboratory", 5, { "Action" }, { "+2 Cards", "+1 Action" });
+	Card library("Library", 5, { "Action" }, { "Draw until you have 7 cards in hand, skipping any Action cards you choose to; set those aside, discarding them afterwards."});
+	Card moneylender("Moneylender", 4, { "Action" }, { "You may trash a Copper from your hand for +3 $." });
+	Card poacher("Poacher", 4, { "Action" }, {"+1 Card", "+1 Action", "+1 $", "Discard a card per empty Supply pile."});
+	Card sentry("Sentry", 5, { "Action" }, { "+1 Card", "+1 Action", "Look at the top 2 cards of your deck. Trash and/or discard any number of them. Put the rest back on top in any order." });
+	Card throneRoom("Throne Room", 4, { "Action" }, { "You may play an Action card from your hand twice." });
+	Card vassal("Vassal", 3, { "Action" }, { "+2 $", "Discard the top card of your deck. if it's an Action card, you ay play it." });
+	Card witch("Witch", 5, { "Action", "Attack" }, { "+2 Cards", "Each other player gains a Curse. " });
+	Card gardens("Gardens", 4, { "Victory" }, { "Worth 1 VP per 10 cards you have (round down)." });
+
 	vector<Card> kingdom = { cellar, moat, village, merchant, workshop, smithy, remodel, militia, market, mine };
 
 	for (int i = 0; i < kingdom.size(); i++) {

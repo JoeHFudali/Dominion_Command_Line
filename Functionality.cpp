@@ -157,8 +157,9 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		do {
 			getline(cin, choice);
 
-			if (choice.substr(0, 5) == "trash") {
+			if (choice.find("trash") != string::npos && b.isCardAvaliable(choice.substr(6))) {
 				string cardToTrash = choice.substr(6);
+				string choice2;
 
 				for (int i = 0; i < hand->size(); i++) {
 					if (!cardBought) {
@@ -169,7 +170,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 							cout << "Buy a card, up to 2 more $ than the trashed one" << endl << endl;
 
-							string choice2;
+							
 							do {
 								cout << "1. Look at specific card in deck - look [card name]" << endl;
 								cout << "2. Buy a card - buy [card name]" << endl;
@@ -188,6 +189,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 										Card c = b.takeCard(cName2);
 										discard->addCard(c);
 										cardBought = !cardBought;
+										choice = "no";
 										break;
 									}
 									else {
@@ -199,10 +201,13 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 									cout << "That is not a choice, or the card pile is empty! Either look at a card, buy a card (that is still in stock), or skip your buy" << endl << endl;
 								}
 
-							} while (choice2[0] != 'b');
+							} while (choice2.find("buy ") == string::npos);
 
 						}
 					}
+				}
+				if (!cardBought && choice2.find("buy ") == string::npos) {
+					cout << "Looks like the card you wanted to trash is not in your hand. Try trashing a card that is in your hand." << endl << endl;
 				}
 
 			}
@@ -220,6 +225,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		vector<Card> toDiscard;
 
 		for (int i = 0; i < hand->size(); i++) {
+			hand->at(i).printCardInfo();
 			cout << "Discard this card?" << endl << endl;
 
 			string choice = "";
@@ -230,12 +236,14 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				if (choice == "yes") {
 					toDiscard.push_back(hand->at(i));
 					hand->erase(hand->begin() + i);
+					choice = "no";
+					i--;
 				}
 				else if (choice != "no") {
 					cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'yes' or 'no' " << endl << endl;
 				}
 
-			} while (choice != "yes" || choice != "no");
+			} while (choice != "no");
 
 
 		}
@@ -648,7 +656,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					}
 				}
 				else if(hasMoat(players[i].getHand())){
-					cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+					cout << "Player " << i + 1 << " has a moat. Attack blocked." << endl << endl;
 				}
 				else {
 					cout << "No more witches left on the board. Attack failed." << endl << endl;
@@ -685,7 +693,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				}
 			}
 			else {
-				cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+				cout << "Player " << i + 1 << " has a moat. Attack blocked." << endl << endl;
 			}
 			
 		}
@@ -720,7 +728,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 			}
 			else {
-				cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+				cout << "Player " << i + 1 << " has a moat. Attack blocked." << endl << endl;
 			}
 			
 
@@ -766,7 +774,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				}
 			}
 			else {
-				cout << "Player" << i + 1 << " has a moat. Attack blocked." << endl << endl;
+				cout << "Player " << i + 1 << " has a moat. Attack blocked." << endl << endl;
 			}
 			
 		}

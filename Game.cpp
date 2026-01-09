@@ -1,6 +1,9 @@
 #include "Game.h"
 
 Game::Game() {
+
+
+
 	b = new Board();
 
 	Player p1("Joe");
