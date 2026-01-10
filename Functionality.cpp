@@ -93,7 +93,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		do {
 			getline(cin, choice);
 
-			if (choice.substr(0, 5) == "trash") {
+			if (choice == "trash") {
 
 				for (int i = 0; i < hand->size(); i++) {
 					if (hand->at(i).getName() == "Copper") {
@@ -101,7 +101,12 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 						hand->erase(hand->begin() + i);
 						b.addToTrash(c);
 						coinCount += 3;
+						choice = "no";
 						break;
+					}
+
+					if (i == hand->size() - 1) {
+						choice = "";
 					}
 				}
 
@@ -110,7 +115,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'trash' or 'no' " << endl << endl;
 			}
 
-		} while (choice != "no" || choice.substr(0, 5) != "trash");
+		} while (choice != "no");
 	}
 
 	else if (cardName == "Vassal") {
@@ -468,6 +473,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			}
 			else {
 				cout << "That is not a choice, or the card pile is empty! Either look at a card, or gain a card that costs up to 5$ (that is still in stock) " << endl << endl;
+				choice = "";
 			}
 
 		} while (choice[0] != 'b');
@@ -559,14 +565,14 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		string choice;
 
-		cout << "NOTE: current is the first care taken" << endl << endl;
+		cout << "NOTE: 'current' is the first card taken" << endl << endl;
 
 		do {
 			cout << "1. Look at the current card - look" << endl;
 			cout << "2. Discard the current card - discard" << endl;
 			cout << "3. Trash the current card - trash" << endl;
 			cout << "4. Rearrange card order/switch to other card - switch" << endl;
-			cout << "5. Put card back on deck - deck" << endl;
+			cout << "5. Put card back on deck - deck" << endl << endl;
 
 			getline(cin, choice);
 
@@ -582,13 +588,22 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				topTwoCards.erase(topTwoCards.begin());
 			}
 			else if (choice == "switch") {
-				Card tempC = topTwoCards[0];
-				topTwoCards[0] = topTwoCards[1];
-				topTwoCards[1] = tempC;
+				if (topTwoCards.size() > 1) {
+					Card tempC = topTwoCards[0];
+					topTwoCards[0] = topTwoCards[1];
+					topTwoCards[1] = tempC;
+				}
+				else {
+					cout << "Cannot switch because the other card is already put back on the draw pile, discarded, or trashed" << endl << endl;
+				}
+				
 			}
 			else if (choice == "deck") {
 				draw->addCard(topTwoCards[0]);
 				topTwoCards.erase(topTwoCards.begin());
+			}
+			else {
+				cout << "Oops, you cannot do that with a sentry. Do one of the five things mentioned above: look, discard, trash, switch, or deck." << endl << endl;
 			}
 
 		} while (!topTwoCards.empty());
@@ -646,10 +661,10 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		if (b.getBase(6).totalCards() > 0) {
 			for (int i = 0; i < players.size(); i++) {
-				if (!hasMoat(players[i].getHand()) || b.isCardAvaliable("Witch")) {
-					Card witch = b.takeCard("Witch");
+				if (!hasMoat(players[i].getHand()) || b.isCardAvaliable("Curse")) {
+					Card curse = b.takeCard("Curse");
 
-					players[i].getDiscard()->addCard(witch);
+					players[i].getDiscard()->addCard(curse);
 
 					if (b.getBase(6).totalCards() == 0) {
 						break;

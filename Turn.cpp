@@ -99,6 +99,14 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 				cout << "Please either enter 'play [Action card] with a valid action card in your hand, or 'skip' to skip the current action." << endl << endl;
 			}
 
+			numActionCards = 0;
+
+			for (int i = 0; i < hand->size(); i++) {
+				if (hand->at(i).isOfType("Action")) {
+					numActionCards++;
+				}
+			}
+
 		} while (choice != "skip");
 
 		
@@ -543,13 +551,15 @@ void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discar
 	}
 
 	if (discard->totalCards() > 0) {
-		cout << setw(10) << "Discard - " << discard->getSingleCard(discard->totalCards() - 1).getName() << endl;
+		cout << setw(10 + discard->getSingleCard(discard->totalCards() - 1).getName().size()) << "Discard - " << discard->getSingleCard(discard->totalCards() - 1).getName() << endl;
+		cout << setw(10) << draw->totalCards() << setw(10 * (hand->size() + 1) + 3) << discard->totalCards() << endl << endl;
 	}
 	else {
 		cout << setw(10) << "Discard" << endl;
+		cout << setw(10) << draw->totalCards() << setw(10 * (hand->size() + 1)) << discard->totalCards() << endl << endl;
 	}
 
-	cout << setw(10) << draw->totalCards() << setw(60) << discard->totalCards() << endl << endl;
+	
 
 
 }
