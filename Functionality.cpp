@@ -724,6 +724,12 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 	else if (cardName == "Bandit") {
 
+		if (b.isCardAvaliable("Gold")) {
+			Card gold = b.takeCard("Gold");
+
+			discard->addCard(gold);
+		}
+
 		for (int i = 0; i < players.size(); i++) {
 
 			if (!hasMoat(players[i].getHand())) {
@@ -734,6 +740,9 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 				isDrawEmpty(players[i].getDraw(), players[i].getDiscard());
 				topTwoCards.push_back(players[i].getDraw()->takeCard());
+
+				cout << "Pulled a " << topTwoCards[0].getName() << " from opponent Player " << i + 1 << "'s deck" << endl;
+				cout << "Pulled a " << topTwoCards[1].getName() << " from opponent Player " << i + 1 << "'s deck" << endl << endl;
 
 				if (topTwoCards[0].getName() == "Gold" || topTwoCards[0].getName() == "Silver") {
 					b.addToTrash(topTwoCards[0]);
