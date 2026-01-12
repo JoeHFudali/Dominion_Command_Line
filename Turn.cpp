@@ -534,11 +534,26 @@ void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discar
 		for (int j = 0; j < 5; j++) {
 			cout << setw(10) << board->getKingdom((i * 5) + j).getSingleCard(0).getName() << " ";
 		}
+		if (i == 1) {
+			if (board->getTrash().totalCards() == 0) {
+				cout << setw(20) << "trash";
+			}
+			else {
+				cout << setw(20) << "trash - " << board->getTrash().getSingleCard(board->getTrash().totalCards() - 1).getName();
+			}
+			
+		}
+		
 		cout << endl;
 
 		for (int j = 0; j < 5; j++) {
 			cout << setw(10) << board->getKingdom((i * 5) + j).totalCards() << " ";
 		}
+
+		if (i == 1) {
+			cout << setw(20) << board->getTrash().totalCards();
+		}
+
 		cout << endl << endl << endl << endl;
 	}
 

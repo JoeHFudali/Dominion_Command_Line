@@ -122,6 +122,8 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		bool actionOrNot = false;
 		isDrawEmpty(draw, discard);
 		Card c = draw->takeCard();
+		cout << "Drew a " << c.getName() << endl << endl;
+
 		for (int i = 0; i < c.getTypes().size(); i++) {
 			if (c.getTypes()[i] == "Action") {
 				actionOrNot = !actionOrNot;
@@ -136,12 +138,15 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 						break;
 					}
+					else if (yOrN == "no") {
+						discard->addCard(c);
+					}
 					else if (yOrN != "no") {
 						cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'yes' or 'no' " << endl << endl;
 					}
 					
 
-				} while (yOrN != "yes" || yOrN != "no");
+				} while (yOrN != "no");
 				
 				
 			}
@@ -278,7 +283,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 				getline(cin, choice);
 
-				if (choice.substr(0, 5) == "trash") {
+				if (choice.find("trash") != string::npos) {
 					for (int j = 0; j < hand->size(); j++) {
 						if (hand->at(j).getName() == choice.substr(6)) {
 							trashed = !trashed;
@@ -292,6 +297,9 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 						cout << "The card you want to trash is not in your hand. Trash a card that is in your hand please!" << endl << endl;
 					}
 					
+				}
+				else if (choice == "pass") {
+					trashed = !trashed;
 				}
 				else if (choice != "pass") {
 					cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'trash [card name]' or 'pass' " << endl << endl;

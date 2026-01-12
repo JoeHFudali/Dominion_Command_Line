@@ -26,6 +26,7 @@ public:
 
 	Deck getBase(int index);
 	Deck getKingdom(int index);
+	Deck getTrash();
 
 
 private:
