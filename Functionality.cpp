@@ -312,32 +312,33 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 	else if (cardName == "Harbinger") {
 
-		for (int i = 0; i < discard->totalCards(); i++) {
-			cout << i + 1 << ". " << discard->getSingleCard(i).getName() << endl;
-		}
-
 		if (discard->totalCards() > 0) {
-			cout << "Which card would you like to put onto the top of your deck? (Enter in the specific card name)" << endl << endl;
+			for (int i = 0; i < discard->totalCards(); i++) {
+				cout << i + 1 << ". " << discard->getSingleCard(i).getName() << endl;
+			}
+
+			if (discard->totalCards() > 0) {
+				cout << "Which card would you like to put onto the top of your deck? (Enter in the specific card name). If you don't want to do this, type 'pass'" << endl << endl;
+			}
+
+			string choice = "";
+
+			Card c;
+
+			do {
+				getline(cin, choice);
+
+				if (discard->takeCard(choice, c)) {
+					draw->addCard(c);
+					break;
+				}
+
+				else if(choice != "pass") {
+					cout << "Looks like you entered in a card name that is not in your discard. Please enter a card name that is actually in your discard deck" << endl << endl;
+				}
+
+			} while (choice != "pass" && discard->totalCards() > 0);
 		}
-
-		string choice = "";
-
-		Card c;
-
-		do {
-			getline(cin, choice);
-
-			if (discard->takeCard(choice, c)) {
-				draw->addCard(c);
-				break;
-			}
-
-			else {
-				cout << "Looks like you entered in a card name that is not in your discard. Please enter a card name that is actually in your discard deck" << endl << endl;
-			}
-
-		} while (true && discard->totalCards() > 0);
-
 		
 	}
 
@@ -626,11 +627,12 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			//Check to see if draw is empty, and then replace it. will do later
 			isDrawEmpty(draw, discard);
 			Card c = draw->takeCard();
+			cout << "pulled a " << c.getName() << endl;
 			if (!c.isOfType("Action")) {
 				hand->push_back(c);
 			}
 			else {
-
+				
 				cout << "Keep this action card in your hand? - type 'yes' or 'no' " << endl << endl;
 				
 				string choice;
@@ -639,6 +641,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 					if (choice == "yes") {
 						hand->push_back(c);
+						choice = "no";
 					}
 
 					else if (choice == "no") {
@@ -650,7 +653,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					}
 
 
-				} while (choice != "no" || choice != "yes");
+				} while (choice != "no");
 
 
 			}
