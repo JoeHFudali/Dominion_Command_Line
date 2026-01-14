@@ -167,63 +167,71 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		do {
 			getline(cin, choice);
 
-			if (choice.find("trash") != string::npos && b.isCardAvaliable(choice.substr(6))) {
-				string cardToTrash = choice.substr(6);
-				string choice2;
+			if (choice.size() > 6) {
+				if (choice.find("trash ") != string::npos && b.isCardAvaliable(choice.substr(6))) {
+					string cardToTrash = choice.substr(6);
+					string choice2;
 
-				for (int i = 0; i < hand->size(); i++) {
-					if (!cardBought) {
-						if (hand->at(i).getName() == cardToTrash) {
-							int price = hand->at(i).getCost() + 2;
-							b.addToTrash(hand->at(i));
-							hand->erase(hand->begin() + i);
+					for (int i = 0; i < hand->size(); i++) {
+						if (!cardBought) {
+							if (hand->at(i).getName() == cardToTrash) {
+								int price = hand->at(i).getCost() + 2;
+								b.addToTrash(hand->at(i));
+								hand->erase(hand->begin() + i);
 
-							cout << "Buy a card, up to 2 more $ than the trashed one" << endl << endl;
+								cout << "Buy a card, up to 2 more $ than the trashed one" << endl << endl;
 
-							
-							do {
-								cout << "1. Look at specific card in deck - look [card name]" << endl;
-								cout << "2. Buy a card - buy [card name]" << endl;
 
-								getline(cin, choice2);
+								do {
+									cout << "1. Look at specific card in deck - look [card name]" << endl;
+									cout << "2. Buy a card - buy [card name]" << endl;
 
-								if (choice2.find("look ") != string::npos) {
-									string cName2 = choice2.substr(5);
-									b.printCardInfo(cName2);
+									getline(cin, choice2);
 
-								}
-								else if (choice2.find("buy ") != string::npos && b.isCardAvaliable(choice2.substr(4))) {
-									string cName2 = choice2.substr(4);
-									Card cToBuy = b.findCardOnBoard(cName2);
-									if (price >= cToBuy.getCost()) {
-										Card c = b.takeCard(cName2);
-										discard->addCard(c);
-										cardBought = !cardBought;
-										choice = "no";
-										break;
+									if (choice2.find("look ") != string::npos) {
+										string cName2 = choice2.substr(5);
+										b.printCardInfo(cName2);
+
+									}
+									else if (choice2.find("buy ") != string::npos && b.isCardAvaliable(choice2.substr(4))) {
+										string cName2 = choice2.substr(4);
+										Card cToBuy = b.findCardOnBoard(cName2);
+										if (price >= cToBuy.getCost()) {
+											Card c = b.takeCard(cName2);
+											discard->addCard(c);
+											cardBought = !cardBought;
+											choice = "no";
+											break;
+										}
+										else {
+											cout << "Oops, looks like you do not have enough money to buy this card" << endl << endl;
+											choice2 = "";
+										}
 									}
 									else {
-										cout << "Oops, looks like you do not have enough money to buy this card" << endl << endl;
+										cout << "That is not a choice, or the card pile is empty! Either look at a card, buy a card (that is still in stock), or skip your buy" << endl << endl;
 										choice2 = "";
 									}
-								}
-								else {
-									cout << "That is not a choice, or the card pile is empty! Either look at a card, buy a card (that is still in stock), or skip your buy" << endl << endl;
-								}
 
-							} while (choice2.find("buy ") == string::npos);
+								} while (choice2.find("buy ") == string::npos);
 
+							}
 						}
 					}
-				}
-				if (!cardBought && choice2.find("buy ") == string::npos) {
-					cout << "Looks like the card you wanted to trash is not in your hand. Try trashing a card that is in your hand." << endl << endl;
-				}
+					if (!cardBought && choice2.find("buy ") == string::npos) {
+						cout << "Looks like the card you wanted to trash is not in your hand. Try trashing a card that is in your hand." << endl << endl;
+					}
 
+				}
+				else if (choice != "no") {
+					cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'trash [card name]' or 'no' " << endl << endl;
+				}
 			}
-			else if (choice != "no") {
-				cout << "Oops, looks like you enetered something that wasn't one of the two options. Enter either 'trash [card name]' or 'no' " << endl << endl;
+
+			if (!cardBought && choice.size() < 6) {
+				cout << "Try again." << endl << endl;
 			}
+			
 
 		} while (choice != "no" && !cardBought);
 		//May need to come back and edit this function, it's a bit much.
@@ -343,6 +351,8 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 	}
 
 	else if(cardName == "Workshop") {
+		bool cardBought = false;
+
 		cout << "Which card would you like to get? (costing a max of 4$)" << endl << endl;
 
 		string choice;
@@ -365,6 +375,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					Card c = b.takeCard(cName2);
 					
 					discard->addCard(c);
+					cardBought = !cardBought;
 					
 					break;
 				}
@@ -378,13 +389,14 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				cout << "That is not a choice, or the card pile is emptied! Either look at a card, or gain a card (that is still in stock) that costs up to 4$" << endl << endl;
 			}
 
-		} while (choice[0] != 'b');
+		} while (!cardBought);
 	}
 
 	else if (cardName == "Mine") {
 		cout << "Trash a treasure to gain a new treasure - type 'trash [treasure card name]' to trash it or 'no' to skip this card" << endl << endl;
 
 		string choice;
+		bool cardBought = false;
 
 		do {
 			getline(cin, choice);
@@ -419,8 +431,10 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 									if (cToBuy.getCost() <= c.getCost() + 3 && cToBuy.isOfType("Treasure")) {
 										cToBuy = b.takeCard(cName2);
 										hand->push_back(cToBuy);
+
 										choice = "no";
-										cout << "works!" << endl;
+										cardBought = !cardBought;
+
 										break;
 									}
 									else {
@@ -435,6 +449,10 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 							} while (true);
 							break;
 						}
+					}
+
+					if (!cardBought) {
+						cout << "Looks like the card you want to trash is not in your hand! Try again with a card that is in your hand" << endl << endl;
 					}
 				}
 				else {
@@ -473,6 +491,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				if (cToBuy.getCost() <= 5) {
 					Card c = b.takeCard(cName2);
 					hand->push_back(c);
+					cardBought = !cardBought;
 					break;
 				}
 				else {
@@ -485,7 +504,9 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				choice = "";
 			}
 
-		} while (choice[0] != 'b');
+		} while (!cardBought);
+
+		cardBought = !cardBought;
 
 		for (int i = 0; i < hand->size(); i++) {
 			cout << i + 1 << ". " << hand->at(i).getName() << endl;
@@ -834,25 +855,33 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			string choice;
 			do {
 
-				cout << "Play an action card in your hand, it will be played twice - play [card name]" << endl << endl;
+				cout << "Play an action card in your hand, it will be played twice - play [card name], or don't play a card twice by typing 'skip' " << endl << endl;
 
 				getline(cin, choice);
 
-				for (int i = 0; i < hand->size(); i++) {
-					if (hand->at(i).getName() == choice.substr(5)) {
-						cardPlayed = !cardPlayed;
-						Card c = hand->at(i);
+				if (choice == "skip") {
+					break;
+				}
 
-						//Card will be imedietly be put into discard, but really should be put onto the in-Play area, will fix this someday.
-						hand->erase(hand->begin() + i);
-						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
-						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+				if (choice.size() > 6) {
+					for (int i = 0; i < hand->size(); i++) {
+						if (hand->at(i).getName() == choice.substr(5) && b.findCardOnBoard(choice.substr(5)).isOfType("Action") && b.findCardOnBoard(choice.substr(5)).getName() != "Throne Room") {
+							cardPlayed = !cardPlayed;
+							Card c = hand->at(i);
 
-						discard->addCard(c);
-						break;
+							//Card will be imemdiatly be put into discard, but really should be put onto the in-Play area, will fix this someday.
+							hand->erase(hand->begin() + i);
+							PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+							PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 
+							discard->addCard(c);
+							break;
+
+						}
 					}
 				}
+
+				
 				if (!cardPlayed) {
 					cout << "Oops, looks like you either entered a card name incorrectly, the card is not in this game, or entered something else other than 'play [card name]'." << endl << endl;
 				}
