@@ -67,7 +67,7 @@ int Deck::sumVP() {
 
 	for (int i = 0; i < cards.size(); i++) {
 		for (int j = 0; j < cards[i].getTypes().size(); j++) {
-			if (cards[i].getTypes()[j].find("Victory") != string::npos) {
+			if (cards[i].getTypes()[j].find("Victory") != string::npos && cards[i].getName() != "Gardens") {
 				sum += cards[i].getDesc()[j][0] - '0';
 				break;
 			}

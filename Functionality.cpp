@@ -291,7 +291,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 				getline(cin, choice);
 
-				if (choice.find("trash") != string::npos) {
+				if (choice.find("trash ") != string::npos && choice.size() > 6) {
 					for (int j = 0; j < hand->size(); j++) {
 						if (hand->at(j).getName() == choice.substr(6)) {
 							trashed = !trashed;
@@ -553,9 +553,9 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 				getline(cin, choice);
 
-				if (choice.substr(0, 7) == "discard") {
+				if (choice.find("discard ") != string::npos && choice.size() > 8) {
 					for (int j = 0; j < hand->size(); j++) {
-						if (hand->at(j).getName() == choice.substr(6)) {
+						if (hand->at(j).getName() == choice.substr(8)) {
 							Card c = hand->at(i);
 							hand->erase(hand->begin() + j);
 							discard->addCard(c);
@@ -863,7 +863,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					break;
 				}
 
-				if (choice.size() > 6) {
+				if (choice.size() > 5) {
 					for (int i = 0; i < hand->size(); i++) {
 						if (hand->at(i).getName() == choice.substr(5) && b.findCardOnBoard(choice.substr(5)).isOfType("Action") && b.findCardOnBoard(choice.substr(5)).getName() != "Throne Room") {
 							cardPlayed = !cardPlayed;

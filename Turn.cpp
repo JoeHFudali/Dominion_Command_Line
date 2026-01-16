@@ -56,15 +56,15 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
 	string choice;
 	int numActionCards = 0;
+	int VPTotal = 0;
 
 	cout << "Action phase." << endl;
 	Card c;
 
-	for (int i = 0; i < hand->size(); i++) {
-		if (hand->at(i).isOfType("Action")) {
-			numActionCards++;
-		}
-	}
+
+
+
+	cout << "Your VP: " << discard->sumVP() + draw->sumVP() << endl;
 	
 
 	while (actions > 0 && numActionCards != 0) {

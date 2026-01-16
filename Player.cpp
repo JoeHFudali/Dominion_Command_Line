@@ -122,5 +122,37 @@ int Player::totalVP() {
 	int retVal = 0;
 	retVal += drawPile->sumVP() + discardPile->sumVP();
 
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).isOfType("Victory") && hand->at(i).getName() != "Gardens") {
+			retVal += hand->at(i).getDesc()[0][0] - '0';
+		}
+		else if (hand->at(i).isOfType("Curse")) {
+			retVal -= hand->at(i).getDesc()[0][1] - '0';
+		}
+	}
+
+	int totalGardensBonus = (drawPile->totalCards() + discardPile->totalCards()) / 10;
+	cout << totalGardensBonus << endl;
+
+	for (int i = 0; i < drawPile->totalCards(); i++) {
+		if (drawPile->getSingleCard(i).getName() == "Gardens") {
+			retVal += totalGardensBonus;
+		}
+	}
+
+	for (int i = 0; i < discardPile->totalCards(); i++) {
+		if (discardPile->getSingleCard(i).getName() == "Gardens") {
+			retVal += totalGardensBonus;
+		}
+	}
+	
+	for (int i = 0; i < hand->size(); i++) {
+		if (hand->at(i).getName() == "Gardens") {
+			retVal += totalGardensBonus;
+		}
+	}
+
+
+
 	return retVal;
 }
