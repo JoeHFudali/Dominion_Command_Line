@@ -898,3 +898,101 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 	//If not any of these, this is either a custom card, a dlc card (will be implemented at a later date), or is moat, which is implemented in a different way.
 }
+
+void Functionality::decideAIAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff) {
+
+	if (cardName == "Cellar") {
+
+		int randNum;
+		Card c;
+		for (int i = 0; i < hand->size(); i++) {
+
+			if (hand->at(i).getCost() <= 2) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+					discard->addCard(c);
+
+					isDrawEmpty(draw, discard);
+					
+					hand->push_back(draw->takeCard());
+				}
+				else {
+					//do nothing, keep card in hand
+				}
+			}
+			else if (hand->at(i).getCost() <= 5) {
+				randNum = 1 + rand() % 4;
+
+				if (randNum > 3) {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+					discard->addCard(c);
+
+					isDrawEmpty(draw, discard);
+
+					hand->push_back(draw->takeCard());
+				}
+				else {
+					//do nothing, keep this card in hand. 75% chance of this happening
+				}
+			}
+			else if (hand->at(i).getCost() > 5) {
+				randNum = 1 + rand() % 10;
+
+				if (randNum > 9) {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+					discard->addCard(c);
+
+					isDrawEmpty(draw, discard);
+
+					hand->push_back(draw->takeCard());
+				}
+				else {
+					//do nothing, keep this card in hand. 90% chance of this happening
+				}
+			}
+		}
+	
+	}
+	else if (cardName == "Mine") {
+		Card c;
+
+		for (int i = 0; i < hand->size(); i++) {
+			if (hand->at(i).isOfType("Treasure")) {
+
+				if (hand->at(i).getName() == "Copper") {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+
+					b.addToTrash(c);
+
+					c = b.takeCard("Silver");
+					hand->push_back(c);
+				}
+
+				else if (hand->at(i).getName() == "Silver") {
+					int randNum = 1 + rand() % 4;
+
+					if (randNum < 4) {
+						c = hand->at(i);
+						hand->erase(hand->begin() + i);
+
+						b.addToTrash(c);
+
+						c = b.takeCard("Silver");
+						hand->push_back(c);
+					}
+					else {
+						//do nothing, only a 25% chance of this happening
+					}
+				}
+
+				//May come back here later to do something with gold (for sure when I impliment the expansion with Platinum).
+			}
+		}
+	}
+}

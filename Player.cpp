@@ -131,8 +131,7 @@ int Player::totalVP() {
 		}
 	}
 
-	int totalGardensBonus = (drawPile->totalCards() + discardPile->totalCards()) / 10;
-	cout << totalGardensBonus << endl;
+	int totalGardensBonus = (drawPile->totalCards() + discardPile->totalCards() + hand->size()) / 10;
 
 	for (int i = 0; i < drawPile->totalCards(); i++) {
 		if (drawPile->getSingleCard(i).getName() == "Gardens") {
@@ -145,7 +144,7 @@ int Player::totalVP() {
 			retVal += totalGardensBonus;
 		}
 	}
-	
+
 	for (int i = 0; i < hand->size(); i++) {
 		if (hand->at(i).getName() == "Gardens") {
 			retVal += totalGardensBonus;

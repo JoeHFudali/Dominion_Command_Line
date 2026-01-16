@@ -25,5 +25,6 @@ private:
 	void isDrawEmpty(Deck* draw, Deck* discard);
 
 	void decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff);
+	void decideAIAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff);
 
 };
