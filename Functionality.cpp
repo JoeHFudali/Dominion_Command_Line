@@ -135,6 +135,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					getline(cin, yOrN);
 
 					if (yOrN == "yes") {
+						discard->addCard(c);
 						PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 						break;
 					}
@@ -994,5 +995,89 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				//May come back here later to do something with gold (for sure when I impliment the expansion with Platinum).
 			}
 		}
+	}
+	else if (cardName == "Chapel") {
+		Card c;
+		int randNum;
+		int cardsTrashed = 0;
+
+		for (int i = 0; i < hand->size(); i++) {
+
+			if (cardsTrashed == 4) {
+				break;
+			}
+
+			if (hand->at(i).isOfType("Curse")) {
+				c = hand->at(i);
+				hand->erase(hand->begin() + i);
+
+				b.addToTrash(c);
+				cardsTrashed++;
+			}
+
+			if (hand->at(i).getCost() <= 2) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+
+					b.addToTrash(c);
+					cardsTrashed++;
+				}
+				else {
+					//do nothing
+				}
+
+			}
+
+			else if (hand->at(i).getCost() <= 5) {
+				randNum = 1 + rand() % 4;
+
+				if (randNum > 3) {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+
+					b.addToTrash(c);
+					cardsTrashed++;
+				}
+				else {
+					//do nothing, 25% chance of trashing a card costing 3-5 coins.
+				}
+			}
+		}
+	}
+	else if (cardName == "Vassal") {
+
+		isDrawEmpty(draw, discard);
+		Card c = draw->takeCard();
+
+		if (c.isOfType("Action")) {
+			PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+			discard->addCard(c);
+		}
+		else {
+			discard->addCard(c);
+		}
+
+
+	}
+	else if (cardName == "Library") {
+		//For the AI, action card will be automatically discarded. Will change this later to have the heuristic be more realisitc (given amount of actions left)
+		Card c;
+
+		while (hand->size() < 7) {
+			isDrawEmpty(draw, discard);
+
+			c = draw->takeCard();
+
+			if (c.isOfType("Action")) {
+				discard->addCard(c);
+			}
+			else {
+				hand->push_back(c);
+			}
+		}
+
 	}
 }
