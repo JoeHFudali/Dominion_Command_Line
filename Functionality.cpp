@@ -1080,4 +1080,147 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		}
 
 	}
+
+	else if (cardName == "Artisan") {
+		//This Artisan has the same 5$ buying heuristic as the general buy phase for our AI, but chooses a random card to top-deck. May change later
+		int randIndex;
+		Card c;
+
+		randIndex = rand();
+
+		if (randIndex % 2 == 0) {
+			if (b.isCardAvaliable("Duchy")) {
+				c = b.takeCard("Duchy");
+
+				hand->push_back(c);
+			}
+		}
+		else {
+			if (b.isCardAvaliable("Festival")) {
+				c = b.takeCard("Festival");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Market")) {
+				c = b.takeCard("Market");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Sentry")) {
+				c = b.takeCard("Sentry");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Witch")) {
+				c = b.takeCard("Witch");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Laboratory")) {
+				c = b.takeCard("Laboratory");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Mine")) {
+				c = b.takeCard("Mine");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Library")) {
+				c = b.takeCard("Library");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Bandit")) {
+				c = b.takeCard("Bandit");
+
+				hand->push_back(c);
+			}
+			else if (b.isCardAvaliable("Council Room")) {
+				c = b.takeCard("Council Room");
+
+				hand->push_back(c);
+			}
+		}
+
+		randIndex = rand() % hand->size();
+
+		c = hand->at(randIndex);
+		hand->erase(hand->begin() + randIndex);
+
+		draw->addCard(c);
+
+
+	}
+
+	else if (cardName == "Workshop") {
+		//Implemented the AI buy heuristic when having 4$ for this card. may change later
+		
+		int randIndex = rand();
+		Card c;
+
+		if (randIndex % 2 == 0) {
+			c = b.takeCard("Silver");
+
+			discard->addCard(c);
+		}
+		else {
+			if (b.isCardAvaliable("Militia")) {
+				c = b.takeCard("Militia");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("Poacher")) {
+				c = b.takeCard("Poacher");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("Remodel")) {
+				c = b.takeCard("Remodel");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("Throne Room")) {
+				c = b.takeCard("Throne Room");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("MoneyLender")) {
+				c = b.takeCard("MoneyLender");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("Gardens")) {
+				c = b.takeCard("Gardens");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("Smithy")) {
+				c = b.takeCard("Smithy");
+
+				discard->addCard(c);
+			}
+			else if (b.isCardAvaliable("Bureaucrat")) {
+				c = b.takeCard("Bureaucrat");
+
+				discard->addCard(c);
+			}
+		}
+	}
+
+	else if (cardName == "Moneylender") {
+		//Moneylender, when used for the AI, will look for the first instance of Copper, and when found, deletes it and gives the AI +3$.
+
+		for (int i = 0; i < hand->size(); i++) {
+
+			if (hand->at(i).getName() == "Copper") {
+				coinCount += 3;
+				Card c = hand->at(i);
+
+				hand->erase(hand->begin() + i);
+				b.addToTrash(c);
+				break;
+			}
+		}
+	}
 }
