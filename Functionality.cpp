@@ -1155,7 +1155,7 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 	else if (cardName == "Workshop") {
 		//Implemented the AI buy heuristic when having 4$ for this card. may change later
-		
+
 		int randIndex = rand();
 		Card c;
 
@@ -1223,4 +1223,114 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			}
 		}
 	}
+
+	else if (cardName == "Harbinger") {
+
+		//For Harbinger, we have a simple heuristic to put high value action cards/Gold onto the top deck, followed by lower level action cards/Silver onto the top deck, and finally anything else (that isn't a victory card)
+
+		bool topped = false;
+		Card c;
+
+		for (int i = 0; i < discard->totalCards(); i++) {
+			c = discard->getSingleCard(i);
+			if (c.isOfType("Action") && c.getCost() >= 5) {
+				discard->takeCard(c.getName(), c);
+				draw->addCard(c);
+				topped = !topped;
+				break;
+			}
+			else if (c.getName() == "Gold") {
+				discard->takeCard(c.getName(), c);
+				draw->addCard(c);
+				topped = !topped;
+				break;
+			}
+		}
+
+		if (!topped) {
+			for (int i = 0; i < discard->totalCards(); i++) {
+				c = discard->getSingleCard(i);
+				if (c.isOfType("Action") && c.getCost() >= 3 && c.getCost() < 5) {
+					discard->takeCard(c.getName(), c);
+					draw->addCard(c);
+					topped = !topped;
+					break;
+				}
+				else if (c.getName() == "Silver") {
+					discard->takeCard(c.getName(), c);
+					draw->addCard(c);
+					topped = !topped;
+					break;
+				}
+			}
+		}
+
+		if (!topped) {
+			for (int i = 0; i < discard->totalCards(); i++) {
+				c = discard->getSingleCard(i);
+				if (!c.isOfType("Victory") && !c.isOfType("Curse")) {
+					discard->takeCard(c.getName(), c);
+					draw->addCard(c);
+					break;
+				}
+			}
+		}
+
+	}
+
+	else if (cardName == "Poacher") {
+		//This heuristic will get rid of lower cost cards first (estate, copper, cellar, etc.) before moving to higher cost cards to discard, depending on the amount of empty decks. 
+		//Only does cost, may come back to change it to a combo of cost and card type later.
+
+		int numEmptyPiles = b.numEmptyDecks();
+		Card c;
+
+		for (int i = 0; i < hand->size(); i++) {
+			if (numEmptyPiles <= 0) {
+				break;
+			}
+
+			if (hand->at(i).getCost() <= 2) {
+				c = hand->at(i);
+				hand->erase(hand->begin() + i);
+
+				discard->addCard(c);
+				numEmptyPiles--;
+			}
+
+		}
+
+		if (numEmptyPiles > 0) {
+			for (int i = 0; i < hand->size(); i++) {
+				if (numEmptyPiles <= 0) {
+					break;
+				}
+
+				if (hand->at(i).getCost() < 5 && hand->at(i).getCost() > 2) {
+					c = hand->at(i);
+					hand->erase(hand->begin() + i);
+
+					discard->addCard(c);
+					numEmptyPiles--;
+				}
+			}
+		}
+
+		if (numEmptyPiles > 0) {
+			for (int i = 0; i < hand->size(); i++) {
+				if (numEmptyPiles <= 0) {
+					break;
+				}
+
+				c = hand->at(i);
+				hand->erase(hand->begin() + i);
+
+				discard->addCard(c);
+				numEmptyPiles--;
+			}
+		}
+		
+	}
+
+
 }
