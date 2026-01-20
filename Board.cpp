@@ -58,7 +58,7 @@ Board::Board() {
 	Card witch("Witch", 5, { "Action", "Attack" }, { "+2 Cards", "Each other player gains a Curse. " });
 	Card gardens("Gardens", 4, { "Victory" }, { "Worth 1 VP per 10 cards you have (round down)." });
 
-	vector<Card> kingdom = { cellar, moat, village, merchant, workshop, smithy, gardens, militia, market, mine };
+	vector<Card> kingdom = { cellar, moat, village, merchant, workshop, smithy, remodel, militia, market, mine };
 
 	for (int i = 0; i < kingdom.size(); i++) {
 		Deck tDeck;

@@ -1332,5 +1332,63 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		
 	}
 
+	else if (cardName == "Throne Room") {
+		//Throne Room plays similarly to Harbinger, but instead checks for action cards, and starts with high cost ones, going to lower costs if a card has not been played, and if no other cards are action cards
+		//in hand, the console outputs a statement saying so
+
+		bool played = false;
+		Card c;
+
+		for (int i = 0; i < hand->size(); i++) {
+			c = hand->at(i);
+			if (c.isOfType("Action") && c.getCost() >= 5) {
+				played = !played;
+
+				hand->erase(hand->begin() + i);
+
+				PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+				PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+				break;
+
+			}
+		}
+
+		if (!played) {
+			for (int i = 0; i < hand->size(); i++) {
+				c = hand->at(i);
+				if (c.isOfType("Action") && c.getCost() < 5 && c.getCost() >= 3) {
+					played = !played;
+
+					hand->erase(hand->begin() + i);
+
+					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					break;
+
+				}
+			}
+		}
+
+		if (!played) {
+			for (int i = 0; i < hand->size(); i++) {
+				c = hand->at(i);
+				if (c.isOfType("Action")) {
+					played = !played;
+
+					hand->erase(hand->begin() + i);
+
+					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					break;
+
+				}
+			}
+		}
+
+		if (!played) {
+			cout << "Agent had no other action cards in hand" << endl << endl;
+		}
+	}
+
 
 }
