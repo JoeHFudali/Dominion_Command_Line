@@ -1390,5 +1390,65 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		}
 	}
 
+	else if (cardName == "Sentry") {
+		//Sentry will go overt the AI's top two cards in it's draw pile, and first check for curses/victory cards, trashing them and discarding them accordingly. Then, if it has a non-cure/non-victory card that
+		//costs less than 3$, it has a 50% chance to put ot back on top of the deck or to discard it, and any other card with a higher cost is automatically put back on top of the draw. May update this heuristic later.
 
+		int randNum;
+		vector<Card> topTwo;
+		Card c;
+
+		isDrawEmpty(draw, discard);
+		topTwo.push_back(draw->takeCard());
+
+		isDrawEmpty(draw, discard);
+		topTwo.push_back(draw->takeCard());
+
+
+		for (int i = 0; i < topTwo.size(); i++) {
+
+			if (topTwo[i].isOfType("Curse")) {
+				c = topTwo[i];
+
+				b.addToTrash(c);
+
+				topTwo.erase(topTwo.begin() + i);
+				i--;
+			}
+			else if (topTwo[i].isOfType("Victory")) {
+				c = topTwo[i];
+				discard->addCard(c);
+
+				topTwo.erase(topTwo.begin() + i);
+				i--;
+			}
+			
+			else if (topTwo[i].getCost() <= 2) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					c = topTwo[i];
+					discard->addCard(c);
+
+					topTwo.erase(topTwo.begin() + i);
+					i--;
+				}
+				else {
+					c = topTwo[i];
+					draw->addCard(c);
+
+					topTwo.erase(topTwo.begin() + i);
+					i--;
+				}
+			}
+
+			else if (topTwo[i].getCost() > 2) {
+				c = topTwo[i];
+				draw->addCard(c);
+
+				topTwo.erase(topTwo.begin() + i);
+				i--;
+			}
+		}
+	}
 }
