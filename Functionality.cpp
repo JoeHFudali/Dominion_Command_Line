@@ -1451,4 +1451,302 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			}
 		}
 	}
+	else if (cardName == "Remodel") {
+		//Remodel will trash a card based on a few different decisions. It will always trash curses, half of the time trash cards costing 2$ or less, and rarely trash cards costing 3$ or more. 
+		//It will also always trash 6$ cards to get provinces. Speaking of that, once trashed, we use the same heuristic as the regular AI buy algorithm to get a new card.
+
+		int newCost;
+		int randNum;
+		bool isTrashed = false;
+		Card c;
+
+		for (int i = 0; i < hand->size(); i++) {
+			c = hand->at(i);
+			if (c.isOfType("Curse")) {
+				hand->erase(hand->begin() + i);
+				isTrashed = !isTrashed;
+				break;
+			}
+			else if (c.getCost() >= 6) {
+				hand->erase(hand->begin() + i);
+				isTrashed = !isTrashed;
+				break;
+			}
+		}
+
+		if (isTrashed) {
+			b.addToTrash(c);
+			newCost = c.getCost() + 2;
+		}
+		else {
+			for (int i = 0; i < hand->size(); i++) {
+				c = hand->at(i);
+				if (c.getCost() <= 2) {
+					randNum = rand();
+
+					if (randNum % 2 == 0) {
+						hand->erase(hand->begin() + i);
+						isTrashed = !isTrashed;
+						break;
+					}
+					else {
+						//Keep going, don't trash low-valued card (that isn't a curse)
+					}
+				}
+			}
+
+			if (isTrashed) {
+				b.addToTrash(c);
+				newCost = c.getCost() + 2;
+			}
+			else {
+				for (int i = 0; i < hand->size(); i++) {
+					c = hand->at(i);
+					if (c.getCost() <= 5 && c.getCost() > 2) {
+						randNum = 1 + rand() % 4;
+
+						if (randNum > 3) {
+							hand->erase(hand->begin() + i);
+							isTrashed = !isTrashed;
+							break;
+						}
+						else {
+							//Keep going, don't trash medium-valued card
+						}
+					}
+				}
+
+				if (isTrashed) {
+					b.addToTrash(c);
+					newCost = c.getCost() + 2;
+				}
+			}
+
+		}
+
+		if (isTrashed) {
+
+			if (newCost < 2) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					//do nothing
+				}
+				else {
+					c = b.takeCard("Copper");
+					discard->addCard(c);
+
+				}
+			}
+
+			else if (newCost == 2) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					if (b.isCardAvaliable("Estate")) {
+						c = b.takeCard("Estate");
+
+						discard->addCard(c);
+					}
+
+				}
+
+				else {
+					if (b.isCardAvaliable("Moat")) {
+						c = b.takeCard("Moat");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Chapel")) {
+						c = b.takeCard("Chapel");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Cellar")) {
+						c = b.takeCard("Cellar");
+
+						discard->addCard(c);
+					}
+				}
+			}
+
+			else if (newCost == 3) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					c = b.takeCard("Silver");
+
+					discard->addCard(c);
+				}
+				else {
+					if (b.isCardAvaliable("Village")) {
+						c = b.takeCard("Village");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Vassal")) {
+						c = b.takeCard("Vassal");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Merchant")) {
+						c = b.takeCard("Merchant");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Workshop")) {
+						c = b.takeCard("Workshop");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Harbinger")) {
+						c = b.takeCard("Harbinger");
+
+						discard->addCard(c);
+					}
+				}
+			}
+
+			else if (newCost == 4) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					c = b.takeCard("Silver");
+
+					discard->addCard(c);
+				}
+				else {
+					if (b.isCardAvaliable("Militia")) {
+						c = b.takeCard("Militia");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Poacher")) {
+						c = b.takeCard("Poacher");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Remodel")) {
+						c = b.takeCard("Remodel");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Throne Room")) {
+						c = b.takeCard("Throne Room");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("MoneyLender")) {
+						c = b.takeCard("MoneyLender");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Gardens")) {
+						c = b.takeCard("Gardens");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Smithy")) {
+						c = b.takeCard("Smithy");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Bureaucrat")) {
+						c = b.takeCard("Bureaucrat");
+
+						discard->addCard(c);
+					}
+				}
+			}
+
+			else if (newCost == 5) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					if (b.isCardAvaliable("Duchy")) {
+						c = b.takeCard("Duchy");
+
+						discard->addCard(c);
+					}
+				}
+				else {
+					if (b.isCardAvaliable("Festival")) {
+						c = b.takeCard("Festival");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Market")) {
+						c = b.takeCard("Market");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Sentry")) {
+						c = b.takeCard("Sentry");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Witch")) {
+						c = b.takeCard("Witch");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Laboratory")) {
+						c = b.takeCard("Laboratory");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Mine")) {
+						c = b.takeCard("Mine");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Library")) {
+						c = b.takeCard("Library");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Bandit")) {
+						c = b.takeCard("Bandit");
+
+						discard->addCard(c);
+					}
+					else if (b.isCardAvaliable("Council Room")) {
+						c = b.takeCard("Council Room");
+
+						discard->addCard(c);
+					}
+				}
+			}
+
+			else if (newCost == 6) {
+				randNum = rand();
+
+				if (randNum % 2 == 0) {
+					c = b.takeCard("Gold");
+
+					discard->addCard(c);
+				}
+				else {
+					if (b.isCardAvaliable("Artisan")) {
+						c = b.takeCard("Artisan");
+
+						discard->addCard(c);
+					}
+				}
+			}
+
+			else if (newCost >= 8) {
+
+				if (b.isCardAvaliable("Province")) {
+					c = b.takeCard("Province");
+
+					discard->addCard(c);
+				}
+
+		}
+		else {
+			cout << "Looks like the agent did not trash anything with remodel" << endl << endl;
+		}
+		
+	}
 }
