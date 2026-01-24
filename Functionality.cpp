@@ -1743,10 +1743,14 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					discard->addCard(c);
 				}
 
+			}
+			else {
+				cout << "Looks like the agent did not trash anything with remodel" << endl << endl;
+			}
+
 		}
-		else {
-			cout << "Looks like the agent did not trash anything with remodel" << endl << endl;
-		}
-		
+	}
+	else {
+		decideAction(cardName, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 	}
 }
