@@ -18,6 +18,7 @@ public:
 
 private:
 
+	void setUpBoard(int numPlayers);
 	void gameEnd();
 
 	int currentTurnCount;

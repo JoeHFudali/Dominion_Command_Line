@@ -7,7 +7,7 @@ class Board {
 public:
 
 	Board();
-	Board(vector<Deck> baseCards, vector<Deck> kingdomCards, int players);
+	Board(vector<Card> kingdomCards, int players);
 
 	void addToTrash(Card c);
 

@@ -29,8 +29,16 @@ void Deck::addCard(Card c) {
 }
 
 Card Deck::takeCard() {
-	Card retCard = cards[cards.size() - 1];
-	cards.pop_back();
+	Card retCard;
+
+	if (totalCards() > 0) {
+		retCard = cards[cards.size() - 1];
+		cards.pop_back();
+	}
+	else {
+		cout << "Error: deck is empty" << endl << endl;
+	}
+	
 	return retCard;
 }
 
@@ -89,5 +97,12 @@ void Deck::printDeck() {
 }
 
 Card Deck::getSingleCard(int index) {
-	return cards[index];
+	Card c;
+	if (totalCards() > 0) {
+		return cards[index];
+	}
+	else {
+		cout << "Error. Deck is empty!" << endl << endl;
+		return c;
+	}
 }

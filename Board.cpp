@@ -73,9 +73,46 @@ Board::Board() {
 	//Trash pile remains unaffected
 }
 
-Board::Board(vector<Deck> baseCards, vector<Deck> kingdomCards, int players) {
-	baseDecks = baseCards;
-	kingdomDecks = kingdomCards;
+Board::Board(vector<Card> kingdomCards, int players) {
+	int vCardNum;
+	if (players == 2) {
+		vCardNum = 8;
+	}
+	else {
+		vCardNum = 12;
+	}
+
+	Card copper;
+	Card silver("Silver", 3, { "Treasure" }, { "2 $" });
+	Card gold("Gold", 6, { "Treasure" }, { "3 $" });
+	Card estate("Estate", 2, { "Victory" }, { "1 VP" });
+	Card duchy("Duchy", 5, { "Victory" }, { "3 VP" });
+	Card province("Province", 8, { "Victory" }, { "6 VP" });
+	Card curse("Curse", 0, { "Curse" }, { "-1 VP" });
+
+	vector<Card> base = { copper, silver, gold, estate, duchy, province, curse };
+	vector<int> deckSizes = { 46 - ((players - 2) * 7), 40, 30, vCardNum, vCardNum, vCardNum, (players - 1) * 10};
+
+	for (int i = 0; i < base.size(); i++) {
+		Deck tDeck;
+
+		for (int j = 0; j < deckSizes[i]; j++) {
+			tDeck.addCard(base[i]);
+		}
+
+		baseDecks.push_back(tDeck);
+	}
+
+
+	for (int i = 0; i < kingdomCards.size(); i++) {
+		Deck tDeck;
+
+		for (int j = 0; j < 10; j++) {
+			tDeck.addCard((kingdomCards[i]));
+		}
+
+		kingdomDecks.push_back(tDeck);
+	}
 
 	numPlayers = players;
 
@@ -105,6 +142,10 @@ Card Board::findCardOnBoard(string name) {
 				break;
 			}
 		}
+	}
+
+	if (!found) {
+		cout << "Error: deck is empty" << endl << endl;
 	}
 
 	return retVal;
@@ -150,6 +191,10 @@ Card Board::takeCard(string name) {
 				break;
 			}
 		}
+	}
+
+	if (!found) {
+		cout << "Error: deck is empty" << endl << endl;
 	}
 
 	return retVal;
@@ -203,9 +248,14 @@ void Board::printBaseInfo() {
 	cout << "Cards in the Base decks and their remaining amounts..." << endl;
 
 	for (int i = 0; i < baseDecks.size(); i++) {
-		cout << i + 1 << ". " << endl;
-		baseDecks[i].getSingleCard(0).printCardInfo();
-		cout << '\n' << "Total number of cards remaining in this deck: " << baseDecks[i].totalCards() << endl << endl;
+		if (baseDecks[i].totalCards() > 0) {
+			cout << i + 1 << ". " << endl;
+			baseDecks[i].getSingleCard(0).printCardInfo();
+			cout << '\n' << "Total number of cards remaining in this deck: " << baseDecks[i].totalCards() << endl << endl;
+		}
+		else {
+			cout << "Error: This deck is empty" << endl << endl;
+		}
 	}
 
 }
@@ -214,9 +264,14 @@ void Board::printKingdomInfo() {
 	cout << "Cards in the Kingdom decks and their remaining amounts..." << endl;
 
 	for (int i = 0; i < kingdomDecks.size(); i++) {
-		cout << i + 1 << ". " << endl;
-		kingdomDecks[i].getSingleCard(0).printCardInfo();
-		cout << '\n' << "Total number of cards remaining in this deck: " << kingdomDecks[i].totalCards() << endl << endl;
+		if (kingdomDecks[i].totalCards() > 0) {
+			cout << i + 1 << ". " << endl;
+			kingdomDecks[i].getSingleCard(0).printCardInfo();
+			cout << '\n' << "Total number of cards remaining in this deck: " << kingdomDecks[i].totalCards() << endl << endl;
+		}
+		else {
+			cout << "Error: This deck is empty" << endl << endl;
+		}
 	}
 
 }
@@ -227,6 +282,10 @@ void Board::printTrashInfo() {
 	for (int i = 0; i < trashDeck.totalCards(); i++) {
 		cout << i + 1 << ". " << endl;
 		trashDeck.getSingleCard(i).printCardInfo();
+	}
+
+	if (trashDeck.totalCards() == 0) {
+		cout << "Trash is empty!" << endl << endl;
 	}
 }
 

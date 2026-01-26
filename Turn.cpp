@@ -235,7 +235,7 @@ void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw,
 
 			cout << "Agent is playing a " << c.getName() << endl;
 
-			action.PlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
+			action.AgentPlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
 
 			inPlay.push_back(c);
 			actions--;
