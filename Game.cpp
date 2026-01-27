@@ -14,16 +14,16 @@ Game::Game() {
 	otherPlayers.push_back(p2);
 
 	currentTurnCount = 0;
-
+	isGameSet = true;
 }
 
-Game::Game(Player you, vector<Player> players, Board board) {
-	*b = board;
+Game::Game(Player you, vector<Player> players) {
 
 	personPlayer = you;
 	otherPlayers = players;
 
 	currentTurnCount = 0;
+	isGameSet = false;
 }
 
 Game::~Game() {
@@ -112,8 +112,10 @@ void Game::setUpBoard(int numPlayers) {
 	Card vassal("Vassal", 3, { "Action" }, { "+2 $", "Discard the top card of your deck. if it's an Action card, you ay play it." });
 	Card witch("Witch", 5, { "Action", "Attack" }, { "+2 Cards", "Each other player gains a Curse. " });
 	Card gardens("Gardens", 4, { "Victory" }, { "Worth 1 VP per 10 cards you have (round down)." });
+
 	vector<Card> kingdomCards = { artisan, bandit, bureaucrat, cellar, chapel, councilRoom, festival, harbinger, laboratory, library, market, merchant, militia, mine, moat,
 	moneylender, poacher, remodel, sentry, smithy, throneRoom, vassal, village, witch, workshop, gardens };
+
 	vector<bool> selected(26, false);
 	int numSelected = 0;
 
@@ -153,6 +155,7 @@ void Game::setUpBoard(int numPlayers) {
 	cout << "Kingdom decks assembled!" << endl << endl;
 
 	b = new Board(kingdomCards, numPlayers);
+	isGameSet = true;
 }
 
 void Game::gameEnd() {
@@ -172,3 +175,6 @@ void Game::gameEnd() {
 	
 }
 
+bool Game::isGameReady() {
+	return isGameSet;
+}

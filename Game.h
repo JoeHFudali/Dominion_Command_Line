@@ -10,15 +10,15 @@ public:
 
 	Game();
 	~Game();
-	Game(Player you, vector<Player> players, Board board);
-
-	void Play();
-
-	
-
-private:
+	Game(Player you, vector<Player> players);
 
 	void setUpBoard(int numPlayers);
+	void Play();
+
+	bool isGameReady();
+
+private:
+	
 	void gameEnd();
 
 	int currentTurnCount;
@@ -27,5 +27,7 @@ private:
 
 	vector<Player> otherPlayers;
 	Board* b;
+
+	bool isGameSet;
 
 };
