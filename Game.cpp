@@ -113,7 +113,7 @@ void Game::setUpBoard(int numPlayers) {
 	Card witch("Witch", 5, { "Action", "Attack" }, { "+2 Cards", "Each other player gains a Curse. " });
 	Card gardens("Gardens", 4, { "Victory" }, { "Worth 1 VP per 10 cards you have (round down)." });
 
-	vector<Card> kingdomCards = { artisan, bandit, bureaucrat, cellar, chapel, councilRoom, festival, harbinger, laboratory, library, market, merchant, militia, mine, moat,
+	vector<Card> avaliableKingdomCards = { artisan, bandit, bureaucrat, cellar, chapel, councilRoom, festival, harbinger, laboratory, library, market, merchant, militia, mine, moat,
 	moneylender, poacher, remodel, sentry, smithy, throneRoom, vassal, village, witch, workshop, gardens };
 
 	vector<bool> selected(26, false);
@@ -124,20 +124,20 @@ void Game::setUpBoard(int numPlayers) {
 	do {
 		string cName;
 		bool found = false;
-		for (int i = 0; i < kingdomCards.size(); i++) {
+		for (int i = 0; i < avaliableKingdomCards.size(); i++) {
 			if (selected[i]) {
-				cout << i + 1 << "1. " << kingdomCards[i].getName() << " - [yes]" << endl;
+				cout << i + 1 << "1. " << avaliableKingdomCards[i].getName() << " - [yes]" << endl;
 			}
 			else {
-				cout << i + 1 << ". " << kingdomCards[i].getName() << " - [no]" << endl;
+				cout << i + 1 << ". " << avaliableKingdomCards[i].getName() << " - [no]" << endl;
 			}
 		}
 
 		getline(cin, cName);
 
-		for (int i = 0; i < kingdomCards.size(); i++) {
-			if (cName == kingdomCards[i].getName()) {
-				kingdomCards.push_back(kingdomCards[i]);
+		for (int i = 0; i < avaliableKingdomCards.size(); i++) {
+			if (cName == avaliableKingdomCards[i].getName()) {
+				kingdomCards.push_back(avaliableKingdomCards[i]);
 				numSelected++;
 				found = !found;
 				break;

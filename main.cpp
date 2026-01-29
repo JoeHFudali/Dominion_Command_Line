@@ -69,13 +69,31 @@ int main() {
 		game.Play();
 	}
 	else if (stoi(choice) == 3) {
-		viewAllCards();
+		string choice2 = "all";
+
+		do {
+			if (choice2 == "all") {
+				viewAllCards();
+			}
+			else if (choice2.find("view ") != string::npos) {
+				//Need to add which cardd to view here as a parameter later
+				viewSpecificCard();
+			}
+			else if (choice2 != "quit") {
+				cout << "Oops, looks like you didn't enter a correct choice." << endl << endl;
+			}
+
+			cout << "Would you like to view this again, look at a specific card, or quit. type 'all', 'view [card name]', or 'quit' respectively" << endl << endl;
+
+			getline(cin, choice2);
+
+
+		} while (choice2 != "quit");
+		
 
 		//cout << "Type 'look [card name]' to look at a specific card, or 'quit' to go back" << endl;
 
-
 	}
-	
 
 	
 	Board b;
@@ -87,5 +105,19 @@ int main() {
 }
 
 void viewAllCards() {
+	cout << "Base Deck Cards: " << endl;
+	cout << "Copper - Silver - Gold - Estate - Duchy - Province - Curse" << endl << endl;
+
+	cout << "Kingdom Cards: " << endl;
+	cout << "Artisan - Bandit - Bureaucrat - Cellar - Chapel" << endl;
+	cout << "Council Room - Festival - Harbinger - Laboratory - Library" << endl;
+	cout << "Market - Merchant - Militia - Mine - Moat" << endl;
+	cout << "Moneylender - Poacher - Remodel - Sentry - Smithy" << endl;
+	cout << "Throne Room - Vassal - Village - Witch - Workshop - Gardens" << endl << endl;
+
+
+}
+
+void viewSpecificCard() {
 
 }

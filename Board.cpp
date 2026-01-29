@@ -154,7 +154,7 @@ Card Board::findCardOnBoard(string name) {
 bool Board::isCardAvaliable(string name) {
 	bool retVal = false;
 	for (int i = 0; i < baseDecks.size(); i++) {
-		if (baseDecks[i].getSingleCard(0).getName() == name && !baseDecks[i].isEmptyDeck()) {
+		if (!baseDecks[i].isEmptyDeck() && baseDecks[i].getSingleCard(0).getName() == name) {
 			retVal = !retVal;
 			break;
 		}
@@ -162,7 +162,7 @@ bool Board::isCardAvaliable(string name) {
 
 	if (!retVal) {
 		for (int i = 0; i < kingdomDecks.size(); i++) {
-			if (kingdomDecks[i].getSingleCard(0).getName() == name && !kingdomDecks[i].isEmptyDeck()) {
+			if (!kingdomDecks[i].isEmptyDeck() && kingdomDecks[i].getSingleCard(0).getName() == name) {
 				retVal = !retVal;
 				break;
 			}

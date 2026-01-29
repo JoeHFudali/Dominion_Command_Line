@@ -992,17 +992,18 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		for (int i = 0; i < hand->size(); i++) {
 			if (hand->at(i).isOfType("Treasure")) {
 
-				if (hand->at(i).getName() == "Copper") {
+				if (hand->at(i).getName() == "Copper" && b.isCardAvaliable("Silver")) {
 					c = hand->at(i);
 					hand->erase(hand->begin() + i);
 
 					b.addToTrash(c);
-
+					
+					
 					c = b.takeCard("Silver");
 					hand->push_back(c);
 				}
 
-				else if (hand->at(i).getName() == "Silver") {
+				else if (hand->at(i).getName() == "Silver" && b.isCardAvaliable("Gold")) {
 					int randNum = 1 + rand() % 4;
 
 					if (randNum < 4) {
@@ -1010,8 +1011,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 						hand->erase(hand->begin() + i);
 
 						b.addToTrash(c);
-
-						c = b.takeCard("Silver");
+						
+						c = b.takeCard("Gold");
 						hand->push_back(c);
 					}
 					else {
@@ -1186,7 +1187,7 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		int randIndex = rand();
 		Card c;
 
-		if (randIndex % 2 == 0) {
+		if (randIndex % 2 == 0 && b.isCardAvaliable("Silver")) {
 			c = b.takeCard("Silver");
 
 			discard->addCard(c);
@@ -1559,7 +1560,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				if (randNum % 2 == 0) {
 					//do nothing
 				}
-				else {
+				else if(b.isCardAvaliable("Copper")) {
+					
 					c = b.takeCard("Copper");
 					discard->addCard(c);
 
@@ -1600,7 +1602,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			else if (newCost == 3) {
 				randNum = rand();
 
-				if (randNum % 2 == 0) {
+				if (randNum % 2 == 0 && b.isCardAvaliable("Silver")) {
+					
 					c = b.takeCard("Silver");
 
 					discard->addCard(c);
@@ -1637,7 +1640,7 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			else if (newCost == 4) {
 				randNum = rand();
 
-				if (randNum % 2 == 0) {
+				if (randNum % 2 == 0 && b.isCardAvaliable("Silver")) {
 					c = b.takeCard("Silver");
 
 					discard->addCard(c);
@@ -1748,7 +1751,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			else if (newCost == 6) {
 				randNum = rand();
 
-				if (randNum % 2 == 0) {
+				if (randNum % 2 == 0 && b.isCardAvaliable("Gold")) {
+					
 					c = b.takeCard("Gold");
 
 					discard->addCard(c);
