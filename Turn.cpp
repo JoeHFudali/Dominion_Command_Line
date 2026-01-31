@@ -80,7 +80,7 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 		do {
 			getline(cin, choice);
 			//Replace second condition with if the card is avaliable in the hand
-			if (choice.find("play ") != string::npos && isCardInHand(c, choice.substr(5), hand) && board->findCardOnBoard(choice.substr(5)).isOfType("Action")) {
+			if (choice.find("play ") != string::npos && isCardInHand(c, choice.substr(5), hand) && c.isOfType("Action")) {
 				Functionality action;
 
 				//Do action - board neeeds to be changed here
@@ -523,9 +523,17 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard) {
 	cout << "Current Board/Player State:" << endl;
 
+	
+
 	//Printing out the board
 	for (int i = 0; i < 7; i++) {
-		cout << setw(10) << board->getBase(i).getSingleCard(0).getName() << " ";
+		if (board->getBase(i).totalCards() > 0) {
+			cout << setw(10) << board->getBase(i).getSingleCard(0).getName() << " ";
+		}
+		else {
+			cout << setw(10) << "XXX ";
+		}
+		
 	}
 	cout << endl;
 
@@ -536,7 +544,14 @@ void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discar
 
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 5; j++) {
-			cout << setw(10) << board->getKingdom((i * 5) + j).getSingleCard(0).getName() << " ";
+
+			if (board->getKingdom((i * 5) + j).totalCards() > 0) {
+				cout << setw(10) << board->getKingdom((i * 5) + j).getSingleCard(0).getName() << " ";
+			}
+			else {
+				cout << setw(10) << "XXX ";
+			}
+			
 		}
 		if (i == 1) {
 			if (board->getTrash().totalCards() == 0) {

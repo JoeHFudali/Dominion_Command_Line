@@ -138,6 +138,7 @@ void Game::setUpBoard(int numPlayers) {
 		for (int i = 0; i < avaliableKingdomCards.size(); i++) {
 			if (cName == avaliableKingdomCards[i].getName()) {
 				kingdomCards.push_back(avaliableKingdomCards[i]);
+				selected[i] = !selected[i];
 				numSelected++;
 				found = !found;
 				break;

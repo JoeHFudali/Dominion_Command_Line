@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Turn.h"
 #include "Board.h"
+#include "Card.h"
 
 using namespace std;
 
