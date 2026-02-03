@@ -3,6 +3,7 @@
 #include "Deck.h"
 #include "Turn.h"
 #include "Player.h"
+#include "Helper.h"
 
 using namespace std;
 
@@ -27,5 +28,7 @@ private:
 
 	void decideAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff);
 	void decideAIAction(string cardName, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board& b, int& actionCount, int& buyCount, int& coinCount, int& mBuff);
+
+	Helper h;
 
 };

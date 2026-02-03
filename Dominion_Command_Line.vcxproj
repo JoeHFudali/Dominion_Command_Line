@@ -132,6 +132,7 @@
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Functionality.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Helper.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Turn.h" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Functionality.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Helper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Turn.cpp" />

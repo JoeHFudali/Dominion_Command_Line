@@ -66,9 +66,6 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 			numActionCards++;
 		}
 	}
-
-
-	cout << "Your VP: " << VPTotal + discard->sumVP() + draw->sumVP() << endl;
 	
 
 	while (actions > 0 && numActionCards != 0) {
@@ -79,6 +76,7 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 
 		do {
 			getline(cin, choice);
+			h.cleanseInput(choice);
 			//Replace second condition with if the card is avaliable in the hand
 			if (choice.find("play ") != string::npos && isCardInHand(c, choice.substr(5), hand) && c.isOfType("Action")) {
 				Functionality action;
@@ -153,6 +151,7 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 			cout << "3. Pass this buy - pass" << endl;
 
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if(choice.find("look ") != string::npos) {
 				string cName = choice.substr(5);

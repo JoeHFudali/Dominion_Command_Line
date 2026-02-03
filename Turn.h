@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "Card.h"
 #include "Deck.h"
+#include "Helper.h"
 
 using namespace std;
 
@@ -38,7 +39,7 @@ private:
 	vector<Card> inPlay;
 
 	Board* board;
-
+	Helper h;
 
 };
 

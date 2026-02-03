@@ -119,6 +119,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		do {
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if (choice == "trash") {
 
@@ -160,6 +161,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 				do {
 					getline(cin, yOrN);
+					h.cleanseInput(yOrN);
 
 					if (yOrN == "yes") {
 						discard->addCard(c);
@@ -194,6 +196,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		do {
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if (choice.size() > 6) {
 				if (choice.find("trash ") != string::npos && b.isCardAvaliable(choice.substr(6))) {
@@ -215,6 +218,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 									cout << "2. Buy a card - buy [card name]" << endl;
 
 									getline(cin, choice2);
+									h.cleanseInput(choice2);
 
 									if (choice2.find("look ") != string::npos) {
 										string cName2 = choice2.substr(5);
@@ -278,6 +282,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 			do {
 				getline(cin, choice);
+				h.cleanseInput(choice);
 
 				if (choice == "yes") {
 					toDiscard.push_back(hand->at(i));
@@ -295,7 +300,6 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		}
 
 		for (int i = 0; i < toDiscard.size(); i++) {
-			//Check for draw being empty, will implement later
 			discard->addCard(toDiscard[i]);
 			isDrawEmpty(draw, discard);
 			hand->push_back(draw->takeCard());
@@ -318,6 +322,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				string choice;
 
 				getline(cin, choice);
+				h.cleanseInput(choice);
 
 				if (choice.find("trash ") != string::npos && choice.size() > 6) {
 					for (int j = 0; j < hand->size(); j++) {
@@ -363,6 +368,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 			do {
 				getline(cin, choice);
+				//Come back here later to use 'cleanse word' - will probably change this code here before implementing it
 
 				if (discard->takeCard(choice, c)) {
 					draw->addCard(c);
@@ -389,6 +395,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			cout << "2. Buy a card - buy [card name]" << endl;
 
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if (choice.find("look ") != string::npos) {
 				string cName2 = choice.substr(5);
@@ -428,6 +435,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		do {
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if (choice.find("trash") != string::npos && b.isCardAvaliable(choice.substr(6))) {
 
@@ -447,6 +455,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 								cout << "2. Buy a card - buy [card name]" << endl << endl;
 
 								getline(cin, choice2);
+								h.cleanseInput(choice2);
 
 								if (choice2.find("look ") != string::npos) {
 									string cName2 = choice2.substr(5);
@@ -507,6 +516,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			cout << "2. Buy a card - buy [card name]" << endl;
 
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if (choice.find("look ") != string::npos) {
 				string cName2 = choice.substr(5);
@@ -546,6 +556,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		do {
 			getline(cin, choice2);
+			//Come back here to implement 'cleanse' here - will probably change the code here before implementing this
 
 			for (int i = 0; i < hand->size(); i++) {
 				if (hand->at(i).getName() == choice2) {
@@ -580,6 +591,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				string choice;
 
 				getline(cin, choice);
+				h.cleanseInput(choice);
 
 				if (choice.find("discard ") != string::npos && choice.size() > 8) {
 					for (int j = 0; j < hand->size(); j++) {
@@ -633,6 +645,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			cout << "5. Put card back on deck - deck" << endl << endl;
 
 			getline(cin, choice);
+			h.cleanseInput(choice);
 
 			if (choice == "look") {
 				topTwoCards[0].printCardInfo();
@@ -687,6 +700,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				string choice;
 				do {
 					getline(cin, choice);
+					h.cleanseInput(choice);
 
 					if (choice == "yes") {
 						hand->push_back(c);
@@ -886,6 +900,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 				cout << "Play an action card in your hand, it will be played twice - play [card name], or don't play a card twice by typing 'skip' " << endl << endl;
 
 				getline(cin, choice);
+				h.cleanseInput(choice);
 
 				if (choice == "skip") {
 					break;
