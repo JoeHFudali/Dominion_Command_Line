@@ -174,6 +174,7 @@ void Game::gameEnd() {
 	cout << personPlayer.getName() << "'s score: " << personPlayer.totalVP() << endl;
 	cout << otherPlayers[0].getName() << "'s score: " << otherPlayers[0].totalVP() << endl << endl;
 	
+	cout << "It took " << currentTurnCount << " turns to play this game!" << endl << endl;
 }
 
 bool Game::isGameReady() {

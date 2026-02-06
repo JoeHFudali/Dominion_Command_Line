@@ -67,12 +67,14 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 		}
 	}
 	
+	if (numActionCards > 0) {
+		printBoardAndPlayerDecks(hand, draw, discard, true);
+		cout << "type 'play [Action card]' to play a specific action card in your hand, or 'skip' to " << endl;
+	}
 
 	while (actions > 0 && numActionCards != 0) {
 
-		printBoardAndPlayerDecks(hand, draw, discard);
-
-		cout << "type 'play [Action card]' to play a specific action card in your hand, or 'skip' to " << endl;
+		
 
 		do {
 			getline(cin, choice);
@@ -92,6 +94,11 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 				actions--;
 				numActionCards--;
 				choice = "skip";
+
+				if (numActionCards != 0) {
+					printBoardAndPlayerDecks(hand, draw, discard, false);
+				}
+				
 			}
 			else if (choice == "skip") {
 				actions--;
@@ -132,12 +139,13 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 		}
 	}
 
+	printBoardAndPlayerDecks(hand, draw, discard, true);
+	cout << "1. Look at specific card in deck - look [card name]" << endl;
+	cout << "2. Buy a card - buy [card name]" << endl;
+	cout << "3. Pass this buy - pass" << endl;
 
 
 	for (int i = 0; i < buys; i++) {
-
-		printBoardAndPlayerDecks(hand, draw, discard);
-
 
 		cout << "Coins: " << coins << endl;
 		cout << "Num of buys: " << buys - i << endl;
@@ -146,9 +154,7 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 
 		string choice;
 		do {
-			cout << "1. Look at specific card in deck - look [card name]" << endl;
-			cout << "2. Buy a card - buy [card name]" << endl;
-			cout << "3. Pass this buy - pass" << endl;
+			
 
 			getline(cin, choice);
 			h.cleanseInput(choice);
@@ -165,6 +171,11 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 					Card c = board->takeCard(cName);
 					discard->addCard(c);
 					coins -= c.getCost();
+
+					if (i < buys - 1) {
+						printBoardAndPlayerDecks(hand, draw, discard, false);
+					}
+					
 					break;
 				}
 				else {
@@ -519,60 +530,62 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 
 }
 
-void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard) {
+void Turn::printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard, bool showBoard) {
 	cout << "Current Board/Player State:" << endl;
 
 	
 
 	//Printing out the board
-	for (int i = 0; i < 7; i++) {
-		if (board->getBase(i).totalCards() > 0) {
-			cout << setw(10) << board->getBase(i).getSingleCard(0).getName() << " ";
-		}
-		else {
-			cout << setw(10) << "XXX ";
-		}
-		
-	}
-	cout << endl;
-
-	for (int i = 0; i < 7; i++) {
-		cout << setw(10) << board->getBase(i).totalCards() << " ";
-	}
-	cout << endl << endl;
-
-	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 5; j++) {
-
-			if (board->getKingdom((i * 5) + j).totalCards() > 0) {
-				cout << setw(10) << board->getKingdom((i * 5) + j).getSingleCard(0).getName() << " ";
+	if (showBoard) {
+		for (int i = 0; i < 7; i++) {
+			if (board->getBase(i).totalCards() > 0) {
+				cout << setw(10) << board->getBase(i).getSingleCard(0).getName() << " ";
 			}
 			else {
 				cout << setw(10) << "XXX ";
 			}
-			
+
 		}
-		if (i == 1) {
-			if (board->getTrash().totalCards() == 0) {
-				cout << setw(20) << "trash";
-			}
-			else {
-				cout << setw(20) << "trash - " << board->getTrash().getSingleCard(board->getTrash().totalCards() - 1).getName();
-			}
-			
-		}
-		
 		cout << endl;
 
-		for (int j = 0; j < 5; j++) {
-			cout << setw(10) << board->getKingdom((i * 5) + j).totalCards() << " ";
+		for (int i = 0; i < 7; i++) {
+			cout << setw(10) << board->getBase(i).totalCards() << " ";
 		}
+		cout << endl << endl;
 
-		if (i == 1) {
-			cout << setw(20) << board->getTrash().totalCards();
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 5; j++) {
+
+				if (board->getKingdom((i * 5) + j).totalCards() > 0) {
+					cout << setw(10) << board->getKingdom((i * 5) + j).getSingleCard(0).getName() << " ";
+				}
+				else {
+					cout << setw(10) << "XXX ";
+				}
+
+			}
+			if (i == 1) {
+				if (board->getTrash().totalCards() == 0) {
+					cout << setw(20) << "trash";
+				}
+				else {
+					cout << setw(20) << "trash - " << board->getTrash().getSingleCard(board->getTrash().totalCards() - 1).getName();
+				}
+
+			}
+
+			cout << endl;
+
+			for (int j = 0; j < 5; j++) {
+				cout << setw(10) << board->getKingdom((i * 5) + j).totalCards() << " ";
+			}
+
+			if (i == 1) {
+				cout << setw(20) << board->getTrash().totalCards();
+			}
+
+			cout << endl << endl << endl << endl;
 		}
-
-		cout << endl << endl << endl << endl;
 	}
 
 

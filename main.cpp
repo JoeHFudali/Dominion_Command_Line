@@ -106,6 +106,7 @@ int main() {
 			}
 
 			game.Play();
+			break;
 		}
 		else if (stoi(choice) == 3) {
 			string choice2 = "all";
