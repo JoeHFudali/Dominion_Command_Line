@@ -95,7 +95,7 @@ void Game::setUpBoard(int numPlayers) {
 	Card remodel("Remodel", 4, { "Action" }, { "Trash a card from your hand. Gain a card costing up to 2 $ more than it." });
 	Card militia("Militia", 4, { "Action", "Attack" }, { "+2 $", "Each other player discards down to 3 cards in hand." });
 	Card market("Market", 5, { "Action" }, { "+1 Card", "+1 Action", "+1 Buy", "+1 $" });
-	Card mine("Mine", 5, { "Action" }, { "You may trash a Treasure from your hand. Gain a Treasure to your hand costing up to 3 o more than it." });
+	Card mine("Mine", 5, { "Action" }, { "You may trash a Treasure from your hand. Gain a Treasure to your hand costing up to 3 $ more than it." });
 	Card artisan("Artisan", 6, { "Action" }, { "Gain a card to your hand costing up to 5$. Put a card from your hand onto your deck." });
 	Card bandit("Bandit", 5, { "Action", "Attack" }, { "Gain a Gold. Each other player reveals the top 2 cards of their deck, trashes a revealed Treasure other than Copper, and discards the rest." });
 	Card bureaucrat("Bureaucrat", 4, { "Action", "Attack" }, { "Gain a Silver onto your deck. Each other player reveals a Victory card from their hand and puts it onto their deck (or reveals a hand with no Victory cards)." });

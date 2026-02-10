@@ -30,6 +30,8 @@ private:
 	vector<string> types;
 	vector<string> description;
 
+	vector<string> splitUpLongDescription(int endIndex, string description);
+
 
 
 };

@@ -70,15 +70,22 @@ void Card::printCardInfo() {
 
 				cout << "|" << setw(longDescLength) << "";
 
-				for (int j = 0; j < description[i].size(); j++) {
-					if ((j % 12 == 0 && j != 0)) {
-						cout << setw(longDescLength) << "" << "|" << endl;
+				vector<string> splitUpDesc = splitUpLongDescription(12, description[i]);
+
+
+				for (int j = 0; j < splitUpDesc.size(); j++) {
+
+					cout << splitUpDesc[j];
+
+					cout << setw(cardWidth - 2 - (longDescLength + splitUpDesc[j].length())) << "" << "|" << endl;
+
+					if (j != splitUpDesc.size() - 1) {
 						cout << "|" << setw(longDescLength) << "";
 					}
-					cout << description[i][j];
+					
 				}
 				
-				cout << setw(longDescLength + (12 -  ((description[i].size() % 12 != 0) ? description[i].length() % 12 : 12))) << "" << "|" << endl;
+				//cout << setw(longDescLength + (12 -  ((description[i].size() % 12 != 0) ? description[i].length() % 12 : 12))) << "" << "|" << endl;
 			}
 			else {
 				if (description[i].size() % 2 == 0) {
@@ -145,4 +152,32 @@ bool Card::isOfType(string type) {
 	}
 
 	return retVal;
+}
+
+vector<string> Card::splitUpLongDescription(int endIndex, string description) {
+	vector<string> retSentences;
+
+	string fragment = "";
+	int currentIndex = 0;
+
+	while (true) {
+
+		if (description.find(' ') != string::npos && fragment.size() + description.find(' ') <= 12) {
+			fragment += description.substr(0, description.find(' ')) + ' ';
+			description = description.substr(description.find(' ') + 1);
+		}
+		else if(description.find(' ') == string::npos) {
+			retSentences.push_back(fragment + description.substr(currentIndex));
+			currentIndex = description.size();
+			break;
+		}
+		else {
+			retSentences.push_back(fragment);
+			fragment = "";
+
+		}
+		
+	}
+
+	return retSentences;
 }
