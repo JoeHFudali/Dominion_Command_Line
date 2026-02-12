@@ -30,6 +30,9 @@ public:
 
 
 private:
+
+	void sortKingdomCards();
+
 	vector<Deck> baseDecks;
 	vector<Deck> kingdomDecks;
 	Deck trashDeck;

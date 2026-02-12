@@ -167,6 +167,7 @@ vector<string> Card::splitUpLongDescription(int endIndex, string description) {
 			description = description.substr(description.find(' ') + 1);
 		}
 		else if(description.find(' ') == string::npos) {
+
 			retSentences.push_back(fragment + description.substr(currentIndex));
 			currentIndex = description.size();
 			break;

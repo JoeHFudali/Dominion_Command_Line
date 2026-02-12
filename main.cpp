@@ -80,7 +80,7 @@ int main() {
 
 	//Testing the Board class below
 
-	Game game;
+	
 
 	string choice;
 
@@ -101,9 +101,35 @@ int main() {
 		}
 		else if (stoi(choice) == 2) {
 
-			if (!game.isGameReady()) {
-				game.setUpBoard(numOfPlayers);
-			}
+			Game game;
+
+			string choice2 = "";
+
+			cout << "Would you like to choose you kingdom cards, have a randomized set of kingdom cards, or use a base set of kingdom cards? type 'choose', 'random', or 'base' respectivly." << endl << endl;
+
+			
+
+
+
+			do {
+				getline(cin, choice2);
+
+				if (choice2 == "choose") {
+					game.setUpBoard(numOfPlayers);
+					choice2 = "base";
+				}
+				else if (choice2 == "random") {
+					game.setUpBoardRandomly(numOfPlayers);
+					choice2 = "base";
+				}
+				else if (choice2 != "base") {
+					cout << "Looks like you entered an incorrect choice. enter either 'choose', 'random', or 'base'. " << endl << endl;
+				}
+				else {
+					game.setUpBasicBoard();
+				}
+
+			} while (choice2 != "base"); 
 
 			game.Play();
 			break;

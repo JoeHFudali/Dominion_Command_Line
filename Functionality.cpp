@@ -437,7 +437,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			getline(cin, choice);
 			h.cleanseInput(choice);
 
-			if (choice.find("trash") != string::npos && b.isCardAvaliable(choice.substr(6))) {
+			if (choice.size() > 6 && choice.find("trash ") != string::npos && b.isCardAvaliable(choice.substr(6))) {
 
 				Card c = b.findCardOnBoard(choice.substr(6));
 

@@ -14,6 +14,8 @@ public:
 	Game(Player you, vector<Player> players);
 
 	void setUpBoard(int numPlayers);
+	void setUpBoardRandomly(int numPlayers);
+	void setUpBasicBoard();
 	void Play();
 
 	bool isGameReady();

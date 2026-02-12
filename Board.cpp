@@ -74,6 +74,7 @@ Board::Board() {
 }
 
 Board::Board(vector<Card> kingdomCards, int players) {
+
 	int vCardNum;
 	if (players == 2) {
 		vCardNum = 8;
@@ -113,6 +114,8 @@ Board::Board(vector<Card> kingdomCards, int players) {
 
 		kingdomDecks.push_back(tDeck);
 	}
+
+	sortKingdomCards();
 
 	numPlayers = players;
 
@@ -328,4 +331,20 @@ Deck Board::getKingdom(int index) {
 
 Deck Board::getTrash() {
 	return trashDeck;
+}
+
+void Board::sortKingdomCards() {
+
+	Deck tDeck;
+
+	for (int i = 0; i < kingdomDecks.size(); i++) {
+		for (int j = 0; j < kingdomDecks.size(); j++) {
+			if (kingdomDecks[i].getSingleCard(0).getCost() < kingdomDecks[j].getSingleCard(0).getCost()) {
+				tDeck = kingdomDecks[j];
+				kingdomDecks[j] = kingdomDecks[i];
+				kingdomDecks[i] = tDeck;
+			}
+		}
+	}
+
 }
