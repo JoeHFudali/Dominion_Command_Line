@@ -107,9 +107,6 @@ int main() {
 
 			cout << "Would you like to choose you kingdom cards, have a randomized set of kingdom cards, or use a base set of kingdom cards? type 'choose', 'random', or 'base' respectivly." << endl << endl;
 
-			
-
-
 
 			do {
 				getline(cin, choice2);

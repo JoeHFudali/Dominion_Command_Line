@@ -35,4 +35,6 @@ void Helper::cleanseInput(string& input) {
 		
 	}
 	//cout << input << endl;
+
+	cout << endl;
 }

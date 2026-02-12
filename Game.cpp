@@ -127,6 +127,7 @@ void Game::setUpBoard(int numPlayers) {
 				cout << i + 1 << ". " << avaliableKingdomCards[i].getName() << " - [no]" << endl;
 			}
 		}
+		cout << endl;
 
 		getline(cin, cName);
 

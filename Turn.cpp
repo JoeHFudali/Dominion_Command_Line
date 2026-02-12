@@ -74,8 +74,6 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 
 	while (actions > 0 && numActionCards != 0) {
 
-		
-
 		do {
 			getline(cin, choice);
 			h.cleanseInput(choice);
@@ -95,25 +93,44 @@ void Turn::takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, 
 				numActionCards--;
 				choice = "skip";
 
-				if (numActionCards != 0) {
+				numActionCards = 0;
+
+				for (int i = 0; i < hand->size(); i++) {
+					if (hand->at(i).isOfType("Action")) {
+						numActionCards++;
+					}
+				}
+
+				if (numActionCards != 0 && actions > 0) {
 					printBoardAndPlayerDecks(hand, draw, discard, false);
 				}
+
 				
 			}
 			else if (choice == "skip") {
 				actions--;
+
+				numActionCards = 0;
+
+				for (int i = 0; i < hand->size(); i++) {
+					if (hand->at(i).isOfType("Action")) {
+						numActionCards++;
+					}
+				}
+
 			}
 			else if (choice != "skip") {
 				cout << "Oops, looks like you either entered the wrong input, the selected card is not an action card, or the card you want to play does not exist/is not part of the current game.";
 				cout << "Please either enter 'play [Action card] with a valid action card in your hand, or 'skip' to skip the current action." << endl << endl;
-			}
 
-			numActionCards = 0;
+				numActionCards = 0;
 
-			for (int i = 0; i < hand->size(); i++) {
-				if (hand->at(i).isOfType("Action")) {
-					numActionCards++;
+				for (int i = 0; i < hand->size(); i++) {
+					if (hand->at(i).isOfType("Action")) {
+						numActionCards++;
+					}
 				}
+
 			}
 
 		} while (choice != "skip");
@@ -171,10 +188,6 @@ void Turn::takeBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 					Card c = board->takeCard(cName);
 					discard->addCard(c);
 					coins -= c.getCost();
-
-					if (i < buys - 1) {
-						printBoardAndPlayerDecks(hand, draw, discard, false);
-					}
 					
 					break;
 				}
