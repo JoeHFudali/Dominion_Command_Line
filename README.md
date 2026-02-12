@@ -28,3 +28,18 @@ Due to the limiting nature of the command line, I will be changing some aspects 
 
 Changes are subject to "change" based on what happens with the web-version, and general feedback.
 
+
+## Checklist of features to be/being worked on
+
+- Functional N.N. Agent that learns how to play dominion: [ ]
+- All base cards implemented: [x]
+- All base cards debugged: [ ]
+- Expansion implementation started: [ ]
+- Base Agent implemented: [x]
+- Base Agent debugged: [ ]
+- Game Instructions: [x] (somewhat, need to reword)
+- Card Manuel: [x]
+- Basic Card ASCII art: [x]
+- 3 to 4 player implementation: [ ]
+- Possible medium-scaled Agent: [ ]
+
