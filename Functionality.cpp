@@ -275,6 +275,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		vector<Card> toDiscard;
 
 		for (int i = 0; i < hand->size(); i++) {
+			cout << i + 1 << ". " << endl;
 			hand->at(i).printCardInfo();
 			cout << "Discard this card?" << endl << endl;
 

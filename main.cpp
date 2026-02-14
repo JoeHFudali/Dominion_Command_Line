@@ -2,6 +2,7 @@
 #include "Turn.h"
 #include "Player.h"
 #include "Game.h"
+#include "Helper.h"
 #include <ctime>
 
 using namespace std;
@@ -14,6 +15,7 @@ void explainGame();
 
 int main() {
 
+	Helper h;
 
 	Card copper;
 	Card silver("Silver", 3, { "Treasure" }, { "2 $" });
@@ -110,6 +112,7 @@ int main() {
 
 			do {
 				getline(cin, choice2);
+				h.cleanseInput(choice2);
 
 				if (choice2 == "choose") {
 					game.setUpBoard(numOfPlayers);
@@ -138,7 +141,7 @@ int main() {
 				if (choice2 == "all") {
 					viewAllCards();
 				}
-				else if (choice2.find("view ") != string::npos) {
+				else if (choice2.find("look ") != string::npos) {
 					//Need to add which cardd to view here as a parameter later
 					viewSpecificCard(choice2.substr(5), baseGameCards);
 				}
@@ -149,9 +152,10 @@ int main() {
 					break;
 				}
 
-				cout << "Would you like to view this again, look at a specific card, or quit. type 'all', 'view [card name]', or 'quit' respectively" << endl << endl;
+				cout << "Would you like to view this again, look at a specific card, or quit. type 'all', 'look [card name]', or 'quit' respectively" << endl << endl;
 
 				getline(cin, choice2);
+				h.cleanseInput(choice2);
 
 
 			} while (choice2 != "quit");
@@ -164,7 +168,7 @@ int main() {
 			break;
 		}
 
-		if (stoi(choice) != 2 && stoi(choice) != 3 && stoi(choice) != 6 && choice != "") {
+		if (stoi(choice) != 1 && stoi(choice) != 2 && stoi(choice) != 3 && stoi(choice) != 6 && choice != "") {
 			cout << "Oops, you entered a choice that is either not one of the selected ones, or is not implemented yet. Please choose again!" << endl << endl;
 		}
 		
@@ -173,8 +177,8 @@ int main() {
 	
 
 	
-	Board b;
-	b.printCardInfo("Moat");
+	//Board b;
+	//b.printCardInfo("Moat");
 
 	
 
@@ -213,6 +217,8 @@ void viewSpecificCard(string cardName, vector<Card> searchList) {
 }
 
 void explainGame() {
+	Helper h;
+
 	cout << "Dominion is a deck-building card game, collecting different cards from treasure cards that provide money, treasure cards that act as the scoring system, and action cards to perform" << endl;
 	cout << "a wide variety of different effects on your own decks and other players decks. This is a recreation of the board game that runs of the command line, where carrying out any kind of actions," << endl;
 	cout << "buys, and more require the user to type their requests out. You are able to often view individual cards and their stats, buy, trash, discard, and do more by typing out specific commands. If you" << endl;
@@ -223,6 +229,8 @@ void explainGame() {
 
 	do {
 		getline(cin, choice);
+		h.cleanseInput(choice);
+
 		cout << endl;
 
 		if (choice == "more") {
