@@ -959,6 +959,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					hand->erase(hand->begin() + i);
 					discard->addCard(c);
 
+					cout << "AI discarded a " << c.getName() << endl << endl;
+
+
 					isDrawEmpty(draw, discard);
 					
 					hand->push_back(draw->takeCard());
@@ -975,6 +978,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					hand->erase(hand->begin() + i);
 					discard->addCard(c);
 
+					cout << "AI discarded a " << c.getName() << endl << endl;
+
 					isDrawEmpty(draw, discard);
 
 					hand->push_back(draw->takeCard());
@@ -990,6 +995,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					c = hand->at(i);
 					hand->erase(hand->begin() + i);
 					discard->addCard(c);
+
+					cout << "AI discarded a " << c.getName() << endl << endl;
 
 					isDrawEmpty(draw, discard);
 
@@ -1013,6 +1020,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					hand->erase(hand->begin() + i);
 
 					b.addToTrash(c);
+
+					cout << "AI trashed a " << c.getName() << endl << endl;
 					
 					
 					c = b.takeCard("Silver");
@@ -1027,6 +1036,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 						hand->erase(hand->begin() + i);
 
 						b.addToTrash(c);
+
+						cout << "AI trashed a " << c.getName() << endl << endl;
 						
 						c = b.takeCard("Gold");
 						hand->push_back(c);
@@ -1056,6 +1067,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				hand->erase(hand->begin() + i);
 
 				b.addToTrash(c);
+
+				cout << "AI trashed a " << c.getName() << endl << endl;
+
 				cardsTrashed++;
 			}
 
@@ -1067,6 +1081,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					hand->erase(hand->begin() + i);
 
 					b.addToTrash(c);
+
+					cout << "AI trashed a " << c.getName() << endl << endl;
+
 					cardsTrashed++;
 				}
 				else {
@@ -1083,6 +1100,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					hand->erase(hand->begin() + i);
 
 					b.addToTrash(c);
+
+					cout << "AI trashed a " << c.getName() << endl << endl;
+
 					cardsTrashed++;
 				}
 				else {
@@ -1096,14 +1116,13 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		isDrawEmpty(draw, discard);
 		Card c = draw->takeCard();
 
+		cout << "AI pulled a " << c.getName() << endl << endl;
+
 		if (c.isOfType("Action")) {
 			PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
-			discard->addCard(c);
+			
 		}
-		else {
-			discard->addCard(c);
-		}
-
+		discard->addCard(c);
 
 	}
 	else if (cardName == "Library") {
@@ -1114,6 +1133,7 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			isDrawEmpty(draw, discard);
 
 			c = draw->takeCard();
+			cout << "AI pulled a " << c.getName() << endl << endl;
 
 			if (c.isOfType("Action")) {
 				discard->addCard(c);
@@ -1187,6 +1207,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			}
 		}
 
+		cout << "AI got a " << c.getName() << endl << endl;
+
+
 		randIndex = rand() % hand->size();
 
 		c = hand->at(randIndex);
@@ -1194,6 +1217,7 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 		draw->addCard(c);
 
+		cout << "AI Top-Decked a " << c.getName() << endl << endl;
 
 	}
 
@@ -1250,6 +1274,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				discard->addCard(c);
 			}
 		}
+
+		cout << "AI got a " << c.getName() << endl << endl;
 	}
 
 	else if (cardName == "Moneylender") {
@@ -1315,9 +1341,17 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				if (!c.isOfType("Victory") && !c.isOfType("Curse")) {
 					discard->takeCard(c.getName(), c);
 					draw->addCard(c);
+					topped = !topped;
 					break;
 				}
 			}
+		}
+
+		if (topped) {
+			cout << "AI Top-Decked a " << c.getName() << endl << endl;
+		}
+		else {
+			cout << "AI did not take anything from the discard (either out of random choice or because it is emptyP\)" << endl << endl;
 		}
 
 	}
@@ -1338,6 +1372,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				c = hand->at(i);
 				hand->erase(hand->begin() + i);
 
+				cout << "AI discarded a " << c.getName() << endl << endl;
+
 				discard->addCard(c);
 				numEmptyPiles--;
 			}
@@ -1354,6 +1390,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					c = hand->at(i);
 					hand->erase(hand->begin() + i);
 
+					cout << "AI discarded a " << c.getName() << endl << endl;
+
 					discard->addCard(c);
 					numEmptyPiles--;
 				}
@@ -1368,6 +1406,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 				c = hand->at(i);
 				hand->erase(hand->begin() + i);
+
+				cout << "AI discarded a " << c.getName() << endl << endl;
 
 				discard->addCard(c);
 				numEmptyPiles--;
@@ -1390,6 +1430,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 				hand->erase(hand->begin() + i);
 
+				cout << "AI is playing a " << c.getName() << "twice." << endl << endl;
+
 				PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 				PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 				break;
@@ -1404,6 +1446,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					played = !played;
 
 					hand->erase(hand->begin() + i);
+
+					cout << "AI is playing a " << c.getName() << "twice." << endl << endl;
 
 					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
@@ -1420,6 +1464,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					played = !played;
 
 					hand->erase(hand->begin() + i);
+
+					cout << "AI is playing a " << c.getName() << "twice." << endl << endl;
 
 					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
