@@ -963,8 +963,12 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 
 					isDrawEmpty(draw, discard);
+
+					c = draw->takeCard();
+
+					cout << "AI pulled a " << c.getName() << endl << endl;
 					
-					hand->push_back(draw->takeCard());
+					hand->push_back(c);
 				}
 				else {
 					//do nothing, keep card in hand
@@ -982,7 +986,11 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 					isDrawEmpty(draw, discard);
 
-					hand->push_back(draw->takeCard());
+					c = draw->takeCard();
+
+					cout << "AI pulled a " << c.getName() << endl << endl;
+
+					hand->push_back(c);
 				}
 				else {
 					//do nothing, keep this card in hand. 75% chance of this happening
@@ -1000,7 +1008,11 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 					isDrawEmpty(draw, discard);
 
-					hand->push_back(draw->takeCard());
+					c = draw->takeCard();
+
+					cout << "AI pulled a " << c.getName() << endl << endl;
+
+					hand->push_back(c);
 				}
 				else {
 					//do nothing, keep this card in hand. 90% chance of this happening
