@@ -1430,10 +1430,10 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 				hand->erase(hand->begin() + i);
 
-				cout << "AI is playing a " << c.getName() << "twice." << endl << endl;
+				cout << "AI is playing a " << c.getName() << " twice." << endl << endl;
 
-				PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
-				PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+				AgentPlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+				AgentPlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 				break;
 
 			}
@@ -1447,10 +1447,10 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 					hand->erase(hand->begin() + i);
 
-					cout << "AI is playing a " << c.getName() << "twice." << endl << endl;
+					cout << "AI is playing a " << c.getName() << " twice." << endl << endl;
 
-					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
-					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					AgentPlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					AgentPlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 					break;
 
 				}
@@ -1465,10 +1465,10 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 					hand->erase(hand->begin() + i);
 
-					cout << "AI is playing a " << c.getName() << "twice." << endl << endl;
+					cout << "AI is playing a " << c.getName() << " twice." << endl << endl;
 
-					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
-					PlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					AgentPlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
+					AgentPlayCard(c, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
 					break;
 
 				}
@@ -1502,12 +1502,16 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 				b.addToTrash(c);
 
+				cout << "AI trashed a " << c.getName() << endl << endl;
+
 				topTwo.erase(topTwo.begin() + i);
 				i--;
 			}
 			else if (topTwo[i].isOfType("Victory")) {
 				c = topTwo[i];
 				discard->addCard(c);
+
+				cout << "AI discarded a " << c.getName() << endl << endl;
 
 				topTwo.erase(topTwo.begin() + i);
 				i--;
@@ -1520,12 +1524,16 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 					c = topTwo[i];
 					discard->addCard(c);
 
+					cout << "AI discarded a " << c.getName() << endl << endl;
+
 					topTwo.erase(topTwo.begin() + i);
 					i--;
 				}
 				else {
 					c = topTwo[i];
 					draw->addCard(c);
+
+					cout << "AI Top-Decked a " << c.getName() << endl << endl;
 
 					topTwo.erase(topTwo.begin() + i);
 					i--;
@@ -1535,6 +1543,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			else if (topTwo[i].getCost() > 2) {
 				c = topTwo[i];
 				draw->addCard(c);
+
+				cout << "AI Top-Decked a " << c.getName() << endl << endl;
 
 				topTwo.erase(topTwo.begin() + i);
 				i--;
@@ -1554,11 +1564,17 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 			c = hand->at(i);
 			if (c.isOfType("Curse")) {
 				hand->erase(hand->begin() + i);
+
+				cout << "AI trashed a " << c.getName() << endl << endl;
+
 				isTrashed = !isTrashed;
 				break;
 			}
 			else if (c.getCost() >= 6) {
 				hand->erase(hand->begin() + i);
+
+				cout << "AI trashed a " << c.getName() << endl << endl;
+
 				isTrashed = !isTrashed;
 				break;
 			}
@@ -1576,6 +1592,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 					if (randNum % 2 == 0) {
 						hand->erase(hand->begin() + i);
+
+						cout << "AI trashed a " << c.getName() << endl << endl;
+
 						isTrashed = !isTrashed;
 						break;
 					}
@@ -1597,6 +1616,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 						if (randNum > 3) {
 							hand->erase(hand->begin() + i);
+
+							cout << "AI trashed a " << c.getName() << endl << endl;
+
 							isTrashed = !isTrashed;
 							break;
 						}
@@ -1837,11 +1859,12 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 				}
 
 			}
-			else {
-				cout << "Looks like the agent did not trash anything with remodel" << endl << endl;
-			}
-
+			cout << "AI got a " << c.getName() << endl << endl;
+			
 		}
+		else {
+			cout << "Looks like the agent did not trash anything with remodel" << endl << endl;
+			}
 	}
 	else {
 		decideAction(cardName, players, hand, draw, discard, b, actionCount, buyCount, coinCount, mBuff);
