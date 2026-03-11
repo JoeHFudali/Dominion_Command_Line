@@ -20,13 +20,13 @@ public:
 private:
 
 	void takeActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
-	void takeBuys(vector<Card>* hand, Deck* draw, Deck* discard);
+	void takeBuys(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
 	void cleanUp(vector<Card>* hand, Deck* draw, Deck* discard);
 
 	void agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
 	void agentBuys(vector<Card>* hand, Deck* draw, Deck* discard);
 
-	void printBoardAndPlayerDecks(vector<Card>* hand, Deck* draw, Deck* discard, bool showBoard);
+	void printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, bool showBoard);
 
 	bool isCardInHand(Card& c, string name, vector<Card>* hand);
 
