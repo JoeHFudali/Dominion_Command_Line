@@ -1064,6 +1064,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		}
 	}
 	else if (cardName == "Chapel") {
+
+		//Debugged
+
 		Card c;
 		int randNum;
 		int cardsTrashed = 0;
@@ -1159,6 +1162,9 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 
 	else if (cardName == "Artisan") {
 		//This Artisan has the same 5$ buying heuristic as the general buy phase for our AI, but chooses a random card to top-deck. May change later
+
+		//Debugged 
+
 		int randIndex;
 		Card c;
 
@@ -1496,6 +1502,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 		//Sentry will go overt the AI's top two cards in it's draw pile, and first check for curses/victory cards, trashing them and discarding them accordingly. Then, if it has a non-cure/non-victory card that
 		//costs less than 3$, it has a 50% chance to put ot back on top of the deck or to discard it, and any other card with a higher cost is automatically put back on top of the draw. May update this heuristic later.
 
+		//Debugged
+
 		int randNum;
 		vector<Card> topTwo;
 		Card c;
@@ -1566,6 +1574,8 @@ void Functionality::decideAIAction(string cardName, vector<Player>& players, vec
 	else if (cardName == "Remodel") {
 		//Remodel will trash a card based on a few different decisions. It will always trash curses, half of the time trash cards costing 2$ or less, and rarely trash cards costing 3$ or more. 
 		//It will also always trash 6$ cards to get provinces. Speaking of that, once trashed, we use the same heuristic as the regular AI buy algorithm to get a new card.
+
+		//Debugged
 
 		int newCost;
 		int randNum;
