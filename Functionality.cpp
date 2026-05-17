@@ -329,7 +329,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 					for (int j = 0; j < hand->size(); j++) {
 						if (hand->at(j).getName() == choice.substr(6)) {
 							trashed = !trashed;
-							Card c = hand->at(i);
+							Card c = hand->at(j);
 							hand->erase(hand->begin() + j);
 							b.addToTrash(c);
 							break;
