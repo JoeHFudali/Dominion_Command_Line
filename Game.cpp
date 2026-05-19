@@ -53,14 +53,20 @@ void Game::Play() {
 				break;
 			}
 
-			otherPlayers[0].ComputerTurn(b, personContainer);
+			for (int i = 0; i < otherPlayers.size(); i++) {
+				otherPlayers[i].ComputerTurn(b, personContainer);
+			}
+			
 
 
 			personPlayer = personContainer[0];
 		}
 
 		personPlayer.discardHand();
-		otherPlayers[0].discardHand();
+		
+		for (int i = 0; i < otherPlayers.size(); i++) {
+			otherPlayers[i].discardHand();
+		}
 
 		gameEnd();
 

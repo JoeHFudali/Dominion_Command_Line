@@ -56,7 +56,13 @@ int main() {
 
 	srand(time(0));
 
-	int numOfPlayers = 2;
+	int numOfPlayers = 0;
+
+
+	//NOTE: Will change this to prompt user to log in (or just play as a guest) later. For now, they will have the player name "Tester" for debug purposes
+	Player testPlayer("Tester");
+
+	vector<Player> oPlayers;
 
 	
 	//Testing the card/deck class below
@@ -102,10 +108,33 @@ int main() {
 			explainGame();
 		}
 		else if (stoi(choice) == 2) {
-
-			Game game;
+			//Starting the game, first by choosing how many players we want (the rest will be computer players).
 
 			string choice2 = "";
+
+			cout << "How many players will be playing this game? (Every other player is a CPU, but include yourself in the count)" << endl << endl;
+
+			
+
+			while (!(cin >> numOfPlayers) || numOfPlayers < 2 || numOfPlayers > 4)  {
+				cout << "Oops, looks like you entered something other than a number, or is out of the normal player range. Please enter the number of players that will be playing, including yourself (2 - 4)" << endl << endl;
+
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+			for (int i = 0; i < numOfPlayers - 1; i++) {
+				string name = "CPU_" + i + 1;
+				Player CPUPlayer(name);
+				oPlayers.push_back(CPUPlayer);
+			}
+
+			Game game(testPlayer, oPlayers);
+
+			
 
 			cout << "Would you like to choose you kingdom cards, have a randomized set of kingdom cards, or use a base set of kingdom cards? type 'choose', 'random', or 'base' respectivly." << endl << endl;
 
