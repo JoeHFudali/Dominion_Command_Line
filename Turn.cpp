@@ -17,7 +17,7 @@ Turn::Turn() {
 	//Do nothing for now
 }
 
-Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b, bool isAgent) {
+Turn::Turn(string name, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b, bool isAgent) {
 
 	actions = 1;
 	buys = 1;
@@ -43,9 +43,13 @@ Turn::Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discar
 		cleanUp(hand, draw, discard);
 	}
 	else {
-		agentActions(players, hand, draw, discard);
+		agentActions(name, players, hand, draw, discard);
 
-		agentBuys(hand, draw, discard);
+		this_thread::sleep_for(chrono::seconds(2));
+
+		agentBuys(name, hand, draw, discard);
+
+		this_thread::sleep_for(chrono::seconds(2));
 
 		cleanUp(hand, draw, discard);
 	}
@@ -243,7 +247,7 @@ bool Turn::isCardInHand(Card& c, string name, vector<Card>* hand) {
 	return retVal;
 }
 
-void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
+void Turn::agentActions(string name, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard) {
 
 
 	for (int i = 0; i < hand->size(); i++) {
@@ -256,7 +260,7 @@ void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw,
 			Card c = hand->at(i);
 			hand->erase(hand->begin() + i);
 
-			cout << "Agent is playing a " << c.getName() << endl;
+			cout << name << " is playing a " << c.getName() << endl;
 
 			action.AgentPlayCard(c, players, hand, draw, discard, *board, actions, buys, coins, merchantBuff);
 
@@ -268,7 +272,7 @@ void Turn::agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw,
 
 }
 
-void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
+void Turn::agentBuys(string name, vector<Card>* hand, Deck* draw, Deck* discard) {
 
 	for (int i = 0; i < hand->size(); i++) {
 		if (hand->at(i).getName() == "Silver") {
@@ -540,7 +544,7 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 			}
 		}
 
-		cout << "Agent bought a " << cToBuy.getName() << endl << endl;
+		cout << name << " bought a " << cToBuy.getName() << endl << endl;
 		buys--;
 	}
 
@@ -549,7 +553,7 @@ void Turn::agentBuys(vector<Card>* hand, Deck* draw, Deck* discard) {
 void Turn::printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, bool showBoard) {
 	cout << "Current Board/Player State:" << endl;
 
-	
+	this_thread::sleep_for(chrono::seconds(1));
 
 	//Printing out the board
 	if (showBoard) {
@@ -568,6 +572,8 @@ void Turn::printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand,
 			cout << setw(10) << board->getBase(i).totalCards() << " ";
 		}
 		cout << endl << endl;
+
+		this_thread::sleep_for(chrono::seconds(1));
 
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -601,7 +607,11 @@ void Turn::printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand,
 			}
 
 			cout << endl << endl << endl << endl;
+
+			
 		}
+
+		this_thread::sleep_for(chrono::seconds(1));
 	}
 
 
@@ -622,6 +632,8 @@ void Turn::printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand,
 	}
 
 	cout << endl << endl << endl;
+
+	this_thread::sleep_for(chrono::seconds(1));
 	
 	
 	for (int j = 0; j < players.size(); j++) {
@@ -641,6 +653,9 @@ void Turn::printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand,
 			cout << setw(10) << "Discard" << endl;
 			cout << setw(10) << players[j].getDraw()->totalCards() << setw(10 * (players[j].getHand()->size() + 1)) << players[j].getDiscard()->totalCards() << endl << endl;
 		}
+
+		this_thread::sleep_for(chrono::seconds(1));
+
 	}
 
 

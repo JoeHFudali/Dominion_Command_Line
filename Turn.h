@@ -1,10 +1,13 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include "Board.h"
 #include "Card.h"
 #include "Deck.h"
 #include "Helper.h"
+
 
 using namespace std;
 
@@ -15,7 +18,7 @@ class Turn
 public:
 
 	Turn();
-	Turn(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b, bool isAgent);
+	Turn(string name, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, Board* b, bool isAgent);
 
 private:
 
@@ -23,8 +26,8 @@ private:
 	void takeBuys(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
 	void cleanUp(vector<Card>* hand, Deck* draw, Deck* discard);
 
-	void agentActions(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
-	void agentBuys(vector<Card>* hand, Deck* draw, Deck* discard);
+	void agentActions(string name, vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard);
+	void agentBuys(string name, vector<Card>* hand, Deck* draw, Deck* discard);
 
 	void printBoardAndPlayerDecks(vector<Player>& players, vector<Card>* hand, Deck* draw, Deck* discard, bool showBoard);
 

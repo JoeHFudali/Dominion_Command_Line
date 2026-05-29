@@ -127,7 +127,8 @@ int main() {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 			for (int i = 0; i < numOfPlayers - 1; i++) {
-				string name = "CPU_" + i + 1;
+				string name = "CPU_" + to_string(i + 1);
+				
 				Player CPUPlayer(name);
 				oPlayers.push_back(CPUPlayer);
 			}

@@ -54,7 +54,9 @@ void Game::Play() {
 			}
 
 			for (int i = 0; i < otherPlayers.size(); i++) {
-				otherPlayers[i].ComputerTurn(b, personContainer);
+				string currentName = otherPlayers[i].getName();
+				otherPlayers[i].ComputerTurn(currentName, b, personContainer);
+				this_thread::sleep_for(chrono::seconds(2));
 			}
 			
 

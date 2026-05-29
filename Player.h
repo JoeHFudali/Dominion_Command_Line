@@ -18,7 +18,7 @@ public:
 	
 	void takeTurn(Board* b, vector<Player>& players);
 
-	void ComputerTurn(Board* b, vector<Player>& oPlayers);
+	void ComputerTurn(string name, Board* b, vector<Player>& oPlayers);
 
 	string getName();
 
