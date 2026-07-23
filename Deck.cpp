@@ -98,7 +98,13 @@ void Deck::printDeck() {
 
 Card Deck::getSingleCard(int index) {
 	Card c;
-	if (totalCards() > 0) {
+	
+	if (index >= cards.size()) {
+		cout << "Error. Deck is too small for that number!" << endl << endl;
+		return c;
+	}
+
+	else if (totalCards() > 0) {
 		return cards[index];
 	}
 	else {

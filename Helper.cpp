@@ -11,6 +11,13 @@ void Helper::cleanseInput(string& input) {
 	bool spaceFound = false;
 	//string firstWord = "";
 
+	for (int i = 0; i < input.size(); i++) {
+		if (!isalpha(input[i]) and input[i] != ' ') {
+			input.erase(i);
+			i--;
+		}
+
+	}
 	
 
 	for (int i = 0; i < input.size(); i++) {
@@ -23,7 +30,7 @@ void Helper::cleanseInput(string& input) {
 			input[i + 1] = toupper(input[i + 1]);
 			i++;
 		}
-		else if (input[i] == ' ' && isalpha(input[i + 1]) && (input.substr(0, i) == "buy" || input.substr(0, i) == "trash" || input.substr(0, i) == "discard" || input.substr(0, i) == "look" || input.substr(0, i) == "play") && !spaceFound && i + 1 < input.size()) {
+		else if (input[i] == ' ' && isalpha(input[i + 1]) && (input.substr(0, i) == "buy" || input.substr(0, i) == "trash" || input.substr(0, i) == "discard" || input.substr(0, i) == "look" || input.substr(0, i) == "play" || input.substr(0, i) == "take") && !spaceFound && i + 1 < input.size()) {
 			input[i + 1] = toupper(input[i + 1]);
 			i++;
 			spaceFound = !spaceFound;

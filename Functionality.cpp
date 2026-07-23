@@ -356,11 +356,11 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		if (discard->totalCards() > 0) {
 			for (int i = 0; i < discard->totalCards(); i++) {
-				cout << i + 1 << ". " << discard->getSingleCard(i).getName() << endl;
+				cout << discard->getSingleCard(i).getName() << endl;
 			}
 
 			if (discard->totalCards() > 0) {
-				cout << "Which card would you like to put onto the top of your deck? (Enter in the specific card name). If you don't want to do this, type 'pass'" << endl << endl;
+				cout << "Which card would you like to put onto the top of your deck? (Type 'take [card name]'). If you don't want to do this, type 'pass'" << endl << endl;
 			}
 
 			string choice = "";
@@ -369,15 +369,18 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 			do {
 				getline(cin, choice);
+				h.cleanseInput(choice);
 				//Come back here later to use 'cleanse word' - will probably change this code here before implementing it
 
-				if (discard->takeCard(choice, c)) {
+
+
+				if (choice.size() > 6 && discard->takeCard(choice.substr(6), c)) {
 					draw->addCard(c);
 					break;
 				}
 
 				else if(choice != "pass") {
-					cout << "Looks like you entered in a card name that is not in your discard. Please enter a card name that is actually in your discard deck" << endl << endl;
+					cout << "Looks like you entered in an invalid card name. Please enter a name of a card that corresponds to a card in your discard, or pass" << endl << endl;
 				}
 
 			} while (choice != "pass" && discard->totalCards() > 0);
