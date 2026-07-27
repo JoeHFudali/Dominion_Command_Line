@@ -7,17 +7,19 @@ Helper::Helper() {
 }
 
 //At this moment, this function takes care of non-alpha characters, extra spaces, and capitilization. WIll include functionality for mispellings like one-off letters, too many letters, switched letters, and other issues.
+//Updated the function to remove numbers from input properly.
 void Helper::cleanseInput(string& input) {
 	bool spaceFound = false;
 	//string firstWord = "";
 
 	for (int i = 0; i < input.size(); i++) {
 		if (!isalpha(input[i]) and input[i] != ' ') {
-			input.erase(i);
+			input.erase(input.begin() + i);
 			i--;
 		}
 
 	}
+	
 	
 
 	for (int i = 0; i < input.size(); i++) {

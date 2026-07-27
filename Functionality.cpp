@@ -374,7 +374,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 
 
-				if (choice.size() > 6 && discard->takeCard(choice.substr(6), c)) {
+				if (choice.size() > 6 && discard->takeCard(choice.substr(5), c)) {
 					draw->addCard(c);
 					break;
 				}
