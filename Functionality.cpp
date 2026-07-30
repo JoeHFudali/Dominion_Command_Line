@@ -360,7 +360,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			}
 
 			if (discard->totalCards() > 0) {
-				cout << "Which card would you like to put onto the top of your deck? (Type 'take [card name]'). If you don't want to do this, type 'pass'" << endl << endl;
+				cout << "Which card would you like to put onto the top of your deck? (Type 'top [card name]'). If you don't want to do this, type 'pass'" << endl << endl;
 			}
 
 			string choice = "";
@@ -374,7 +374,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 
 
-				if (choice.size() > 6 && discard->takeCard(choice.substr(5), c)) {
+				if (choice.size() > 5 && discard->takeCard(choice.substr(4), c) && choice.substr(0, 3) == "top") {
 					draw->addCard(c);
 					break;
 				}
@@ -551,7 +551,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 		cardBought = !cardBought;
 
 		for (int i = 0; i < hand->size(); i++) {
-			cout << i + 1 << ". " << hand->at(i).getName() << endl;
+			cout << hand->at(i).getName() << endl;
 		}
 		cout << endl;
 
@@ -560,10 +560,11 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 
 		do {
 			getline(cin, choice2);
+			h.cleanseInput(choice2);
 			//Come back here to implement 'cleanse' here - will probably change the code here before implementing this
 
 			for (int i = 0; i < hand->size(); i++) {
-				if (hand->at(i).getName() == choice2) {
+				if (choice2.substr(0, 3) == "top" && hand->at(i).getName() == choice2.substr(4) && choice2.size() > 4) {
 					c = hand->at(i);
 					hand->erase(hand->begin() + i);
 					draw->addCard(c);
@@ -573,7 +574,7 @@ void Functionality::decideAction(string cardName, vector<Player>& players, vecto
 			}
 			
 			if (!cardBought) {
-				cout << "Looks like you entered in a card name that is not in your hand. Please enter a card name that is actually in your hand" << endl << endl;
+				cout << "Looks like you entered in a card name that is not in your hand. Please enter a card name that is actually in your hand and want to top-deck ('top [card name]')" << endl << endl;
 			}
 
 		} while (!cardBought);
